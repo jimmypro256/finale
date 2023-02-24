@@ -1,0 +1,227 @@
+
+*{
+  font-family: Arial, Helvetica, sans-serif;
+}
+.ministers{
+  display: grid;
+  grid-template-columns: repeat(2,1fr);
+ 
+
+}
+.carbinet{
+  margin-top: 100px;
+}
+.ministers .card{
+  width: 180px;
+  background-color: antiquewhite;
+  height: 33vh;
+  border: 1px solid gray;
+ 
+  margin: 10px;
+  
+}
+.image{
+  background-color: rgb(122, 122, 122);
+  height: 25vh;
+  
+}
+.title{
+  
+  background-color: blue;
+  height: 7vh;
+  color: #fff;
+  text-align: center;
+}
+.card1{
+  height: 35vh;
+  border: 1px solid gray;
+  margin: 10px;
+  width: 180px;
+}
+.image1{
+  text-align: center;
+  margin-top: 30px;
+}
+.card1 button{
+  background-color: darkblue;
+  color: #fff;
+  padding: 3px;
+  outline: none;
+  border-radius: 7px;
+  border: none;
+  width: 60px;
+}
+.appbar{
+ 
+  background-color: #fff;
+  color: white;
+  font-size: 27px;
+  font-family: Arial, Helvetica, sans-serif;
+  padding: 20px;
+  font-weight: bold;
+  text-align: center;
+
+}
+.menu{
+  transform: rotate(90deg);
+}
+h4{
+
+  padding-top: 60px;
+  text-align: center;
+  background: rgb(10, 1, 1);
+  color: #fff;
+  padding-bottom: 10px;
+ 
+
+}
+.header{
+  text-align: center;
+  font-size: 20px;
+  font-family: Arial, Helvetica, sans-serif;
+  margin-top: 1em;
+  background-color: rgb(218, 218, 233);
+}
+.movies li img{
+  width: 300px;
+  
+  height: 45vh;
+  margin: auto;
+  padding: 5px;
+  
+
+ 
+}
+.movies li img:hover{
+  padding: 9px;
+  border-radius: 10px;
+  transition: .3s;
+
+}
+.movies li{
+  list-style-type: none;
+  background: rgb(7, 6, 11);
+  border: 1px solid rgb(244, 237, 237);
+ 
+
+
+}
+
+
+ .error{
+  background-color:red;
+ 
+  color: #fff;
+}
+
+
+.loginbg{
+  background-color: rgb(243, 201, 201);
+  height: 100vh;
+}
+
+.login_input{
+  background-color: #faf5f5;
+  border-radius: 3px;
+  border: 1px solid black;
+  font-size: .9em;
+}
+.movies{
+  display: grid;
+  grid-template-columns: repeat(4,1fr);
+  background: black;
+  padding: 60px;
+  gap: 2em;
+  padding-top:30px ;
+}
+.movies h4{
+  text-align: center;
+  font-size: 23px;
+  color:#fff;
+}
+
+.search{
+  display: flex;
+ 
+  gap: 3em;
+ 
+ 
+}
+.nav-links{
+  text-decoration: none;
+  color: white;
+  text-transform: uppercase;
+  font-size: 1.9em;
+  
+
+}
+.admin{
+  color: white;
+  margin-top: 40px;
+
+}
+button{
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+#fixtures{
+  margin: 4px;
+  padding: 5px;
+  border: none;
+}
+
+.social button{
+  
+  
+  background-color: #fff;
+  box-shadow: 0 0 10px gray;
+  border-radius: 10px;
+  width: 60px;
+  outline: none;
+  border: none;
+  padding-top: 10px;
+  padding-bottom:5px;
+}
+#comment{
+  background-color: #fff;
+  box-shadow: 0 0 10px gray;
+  border-radius: 10px;
+
+  outline: none;
+  border: none;
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+.commadminbg{
+  background-color: rgb(235, 210, 192);
+  padding-bottom: 100px;
+
+}
+
+.links p{
+  background-color: black;
+  color: #fff;
+  font-size: 1.1em;
+  text-decoration: none;
+  padding: 4px;
+  border-radius: 5px;
+}
+
+@media(max-width:768px){ 
+  .movies{
+    display: block;
+    width: 94%;
+    padding: 10px;
+    font-size: 17px;
+
+  }
+  .movies li{
+    
+      margin: 10px;
+     
+     padding-top: 10px;
+     
+    }
+  
+
+}
