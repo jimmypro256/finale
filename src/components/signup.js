@@ -30,7 +30,7 @@ function Signup(){
         .then((userCredential) => {
           // Signed in 
           const user = userCredential.user;
-     navigate("/login")
+     navigate("/")
         })
         .catch((error) => {
         setError(true)
@@ -40,7 +40,7 @@ function Signup(){
 
      
 
-    const [activeTab, setActiveTab]=useState("Login")
+    
 
 
   return(
@@ -50,18 +50,7 @@ function Signup(){
     <Box textAlign="center" marginTop="100px" >
      
 
-            <Box textAlign="center">
-                  <Link to="/">
-                    
-                    <p
-                    className={`${activeTab  === "Login" ? "active" : ""}`}
-                    onClick={()=> setActiveTab("Login")}
-                    >
-                   LOGIN
-                    </p>
-                  </Link>
-            </Box>
-
+         
   
 
       <Typography marginTop="40px" textAlign="center" >REGISTER</Typography>

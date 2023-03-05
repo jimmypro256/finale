@@ -6,7 +6,7 @@ import CloseIcon from '@material-ui/icons/Close'
 
 import AddIcon from '@material-ui/icons/Add'
 import app from '../firebase-config'
-import {collection, getDocs,addDoc, getFirestore,deleteDoc} from 'firebase/firestore'
+import {collection, getDocs,addDoc, getFirestore} from 'firebase/firestore'
 import SimpleAccordion from './accordion'
 
 import { doc } from 'firebase/firestore'
@@ -23,7 +23,7 @@ const Home=() =>{
     const [comment, setComment] = useState("")
     const [open1, setOpen1] = useState(false)
     const [open2, setOpen2] = useState(false)
-
+    const [loader, setLoader] = useState(false)
     const db =getFirestore(app)
 
 
@@ -62,6 +62,22 @@ const action = (
     </React.Fragment>
   );
   
+
+        // guild president
+        const [data4, setData4] = useState([]);
+        const getAlldata4=()=> {
+          getDocs(collection(db, "guild_president")).then(docSnap => {
+            let users = [];
+            docSnap.forEach((doc)=> {
+                users.push({ ...doc.data(), id:doc.id })
+            });
+            setData4(users);
+          });
+        };
+        
+        useEffect(()=>{
+          getAlldata4()
+        }, []);
 
 
 
@@ -103,7 +119,7 @@ const action = (
     let table1 = collection(db, "upcoming_events")
    const [free1, setFree1]=useState([])
     useEffect(()=>{
- 
+          setLoader(true)
       ;(async()=>{
        const raw_data1=await getDocs(table1)
       
@@ -114,7 +130,7 @@ const action = (
          console.log(show1)
      
          setFree1(show1)
-         
+         setLoader(false)
       
       })()
     
@@ -122,50 +138,22 @@ const action = (
 
 
 
-  
-
-
-   
-    const deleteItem=async(id)=>{
-      await deleteDoc(doc(db, "suggestions", id));
-      
-      getAlldata();
-    }
-
-
- 
-
-
-  
- 
-  const [data, setData] = useState([]);
-  const getAlldata=()=> {
-    getDocs(collection(db, "suggestions")).then(docSnap => {
-      let users = [];
-      docSnap.forEach((doc)=> {
-          users.push({ ...doc.data(), id:doc.id })
-      });
-      setData(users);
-    });
-  };
-  
-  useEffect(()=>{
-    getAlldata()
-  }, []);
-  
-
 
 
   return(
 
    <Box>
 
-<ButtonAppBar/>
+      <Backdrop open={loader}>
+        <CircularProgress />
+      </Backdrop>
+
+   <ButtonAppBar/>
    <Box className="main" sx={{width:"100%", marginTop:"5px", background:"rgb(250, 241, 229)" ,paddingBottom:"30px"}}>
       <Box textAlign="center" marginTop="75px" ></Box>
    
       <Box border="3px solid darkblue" height="60vh" margin="5px" paddingTop="60px">
-          <Box height="30vh" sx={{margin:"auto" , width:"290px" }} ><img style={{width:"100%", height:"50vh", boxShadow:"0 0 10px gray", border:"1px solid blue"}} src={require('../images/TTT.PNG')} alt="" /></Box>
+          <Box height="30vh" sx={{margin:"auto" , width:"94%" }} ><img style={{width:"100%", height:"50vh", boxShadow:"0 0 10px gray", border:"1px solid blue"}} src={require('../images/TTT.PNG')} alt="" /></Box>
           <Box height="30vh" >
             <Typography textAlign="center" fontWeight="bold" fontSize="24px">GULU UNIVERSITY</Typography>
             <Typography textAlign="center">"for community transformation"</Typography>
@@ -180,16 +168,21 @@ const action = (
 
 
 
+            {data4.map(item => (
+            <view key={item.id}  getAlldata4={getAlldata4} >
             <Box height="60vh" margin="5px" boxShadow="0 0 10px gray" paddingTop="10px" border="1px solid blue">
 
-                    <Stack border="1px solid white" height="55vh" margin="10px" >
-                    <Stack width="300px" margin="auto" alignItems="center">
+            <Stack border="1px solid white" height="55vh" margin="10px" >
+              <Stack width="98%" margin="auto" alignItems="center" color="red">
              
-              <Typography height="10vh" boxShadow="0 0 5px black" backgroundColor="rgb(16, 16, 83)" color="white" sx={{width:"300px", textAlign:"center" ,border:"2px solid black"}}>GUILD PRESIDENT<br></br> H.E xxxxxxxxxxxxxxxxxxxxxxxx</Typography>
-
+             <img style={{width:"78%", height:"39vh", boxShadow:"0 0 20px black",border:"4px solid gray"}} src={item.imageUrl} alt="president" /> 
+                <Typography height="10vh" boxShadow="0 0 5px black" backgroundColor="rgb(16, 16, 83)" color="white" sx={{width:"78%", textAlign:"center" ,border:"4px solid black"}}>GUILD PRESIDENT<br></br> H.E {item.name}</Typography>
+              
+              </Stack>
             </Stack>
-                    </Stack>
-                </Box>
+            </Box>
+            </view>
+            ))}
 
 
        
@@ -256,7 +249,8 @@ const action = (
 
                 <Stack border="2px solid rgb(16, 16, 83)" paddingBottom="20px" margin="10px" >
                 <Typography textAlign="center" backgroundColor="rgb(16, 16, 83)" color="white" margin="10px"  border="1px solid white"  fontWeight="bold" fontSize="21px">UPCOMING ACTIVITIES AND EVENTS</Typography>
-                 
+                      
+            
        
 
 
@@ -289,31 +283,27 @@ const action = (
           <Typography textAlign="center" padding="3px" margin="10px"  border="1px solid white" backgroundColor="rgb(16, 16, 83)" fontWeight="bold" color="white" fontSize="21px">RECENT COMMUNICATIONS</Typography>
 
 
-
-      {
+          {
             free.map(guild_communications=>{
               
               return(
   
 
-            <Box  sx={{backgroundColor:"rgb(16, 16, 83)", margin:"5px", paddingTop:"6px"}}>
-                 <Stack sx={{margin:"15px", gap:"1em"}}> 
-                       <Box sx={{backgroundColor:"darkblue", color:"wheat", height:"6vh",padding:"4px", margin:"5px",display:"flex", justifyContent:"space-between",alignItems:"center" , border:"1px solid gray"}}>
-                          <Typography sx={{margin:"7px" }}>{guild_communications.to1}</Typography>
-                          <Typography sx={{ color:"white", margin:"7px"}}>{guild_communications.data1}</Typography>
-                       </Box>
-
-                       <Box border="1px solid grey" height="40vh">
-        
-                            <Typography sx={{ color:"wheat", margin:"7px"}}>{guild_communications.info1}</Typography>
-                        
-                        
-                      </Box>
-
-                     
-                     
-                 </Stack>
-            </Box>
+<Box  sx={{backgroundColor:"rgb(16, 16, 83)", padding:"10px",  margin:"5px", paddingTop:"6px", marginTop:"35px"}}>
+ <Stack sx={{ gap:".4em"}}>
+  <Box sx={{backgroundColor:"rgb(16, 16, 83)", color:"wheat",padding:"5px", margin:"2px",alignItems:"center" , border:"3px solid gray"}}>
+  <Typography sx={{margin:"3px", fontSize:"1em" }}>TO: {guild_communications.to1}</Typography>
+  <Typography sx={{ color:"white", fontSize:"1em", margin:"1px"}}>DATE: {guild_communications.date1}</Typography>
+  </Box>
+  
+   
+   
+   <Box border="1px solid grey" margin="4px">
+   
+   <Typography sx={{ color:"wheat", margin:"3px"}}>{guild_communications.info1}</Typography>
+   </Box>
+ </Stack>
+</Box>
 
    
 )
@@ -341,22 +331,6 @@ const action = (
 
 
 
-<View>
-  
-    {data.map(item => (
-      <View key={item.id}  getAlldata={getAlldata}>
-        <Stack direction="row" gap="20px">
-      
-        <Text>{item.name}</Text>
-        <Text>{item.faculty}</Text>
-        <Text>{item.comment}</Text>
-       
-        <button title="Delete" onClick={() => deleteItem(item.id)} >DELETE</button>
-        </Stack>
-       
-      </View>
-    ))}
-  </View>
 
    </Box>
    </Box>

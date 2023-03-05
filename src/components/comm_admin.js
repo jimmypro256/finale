@@ -6,8 +6,8 @@ import app from '../firebase-config'
 import { Link} from 'react-router-dom'
 import {collection, getDocs,addDoc, getFirestore,deleteDoc,doc} from 'firebase/firestore'
 import ButtonAppBar from './appbar1'
-import {  Text, View } from 'react-native-web'
-
+import {  View } from 'react-native-web'
+import { Delete } from "@material-ui/icons";
 
 
 
@@ -97,12 +97,6 @@ function CommAdmin(){
       }
     }
 
-
-
- 
-
-
-
     const [activeTab, setActiveTab]=useState("Home")
 
 
@@ -136,6 +130,64 @@ function CommAdmin(){
     useEffect(()=>{
       getAlldata()
     }, []);
+
+
+
+
+
+
+
+    
+      // upcoming events fetch
+      const [data3, setData3] = useState([]);
+      const getAlldata3=()=> {
+        getDocs(collection(db, "upcoming_events")).then(docSnap => {
+          let users = [];
+          docSnap.forEach((doc)=> {
+              users.push({ ...doc.data(), id:doc.id })
+          });
+          setData3(users);
+        });
+      };
+      
+      useEffect(()=>{
+        getAlldata3()
+      }, []);
+
+
+       // delete upcoming event
+    const deleteItem3=async(id)=>{
+      await deleteDoc(doc(db, "upcoming_events", id));
+      
+      getAlldata3();
+    }
+
+
+     // guild comm
+     const [data2, setData2] = useState([]);
+     const getAlldata2=()=> {
+       getDocs(collection(db, "guild_communications")).then(docSnap => {
+         let users = [];
+         docSnap.forEach((doc)=> {
+             users.push({ ...doc.data(), id:doc.id })
+         });
+         setData2(users);
+       });
+     };
+     
+     useEffect(()=>{
+       getAlldata2()
+     }, []);
+
+
+      // delete guild comm
+   const deleteItem2=async(id)=>{
+     await deleteDoc(doc(db, "guild_communications", id));
+     
+     getAlldata2();
+   }
+
+        
     
 
 
@@ -244,18 +296,80 @@ function CommAdmin(){
 
     {data.map(item => (
       <View key={item.id}  getAlldata={getAlldata}>
-        <Stack gap="20px" backgoundColor="darkblue" color="white"  sx={{margin:"20px", backgoundColor:"darkblue"}}>
-      
-        <Text border="1px solid gray" margin="5px" padding="5px">{item.to}</Text>
-        <Text border="1px solid gray" margin="5px" padding="5px">{item.date}</Text>
-        <Text border="1px solid gray" margin="5px" padding="5px">{item.info}</Text>
        
-        <button title="Delete" onClick={() => deleteItem(item.id)} >DELETE</button>
-        </Stack>
+       <Box  sx={{backgroundColor:"rgb(16, 16, 83)", padding:"10px",  margin:"5px", paddingTop:"6px", marginTop:"35px"}}>
+              <Stack sx={{ gap:".4em"}}>
+                <Box sx={{backgroundColor:"rgb(16, 16, 83)", color:"wheat",padding:"5px", margin:"2px",alignItems:"center" , border:"3px solid gray"}}>
+                <Typography sx={{margin:"3px", fontSize:"1em" }}>TO: {item.to}</Typography>
+                <Typography sx={{ color:"white", fontSize:"1em", margin:"1px"}}>DATE: {item.date}</Typography>
+                </Box>
+                
+                
+                
+                <Box border="1px solid grey" margin="4px">
+                
+                <Typography sx={{ color:"wheat", margin:"3px"}}>{item.info}</Typography>
+                </Box>
+                <Box color="red">
+                <Delete onClick={() => deleteItem(item.id)} size="20px"/>
+                </Box>
+              </Stack>
+              </Box>
        
       </View>
     ))}
   </View>
+
+
+
+
+    {/* upcoming events fetched here */}
+    <Typography textAlign="center" marginTop="60px">UPCOMING EVENTS</Typography>
+    {data3.map(item => (
+           <view key={item.id}  getAlldata3={getAlldata3} >
+             <Box border="4px solid gray" backgroundColor="rgb(1, 1, 26)"  marginTop="10px" width="95%" margin="10px">
+              <Stack direction="row" gap=".7em" color="red">
+               
+
+                <Stack direction="row" gap="1em" margin="3px" color="red">
+                  <Typography color="white">{item.event}</Typography>
+                  <Typography color="white">{item.date2}</Typography>
+                 
+                  
+                </Stack>
+                <Delete onClick={() => deleteItem3(item.id)} size="20px"/>
+              </Stack>
+             </Box>
+             </view>
+        ))}
+
+
+
+         {/* guild comm fetched here */}
+         <Typography textAlign="center" marginTop="60px">GUILD COMMUNICATIONS</Typography>
+      {data2.map(item => (
+           <view key={item.id}  getAlldata2={getAlldata2} >
+            <Box  sx={{backgroundColor:"rgb(16, 16, 83)", padding:"10px",  margin:"5px", paddingTop:"6px", marginTop:"35px"}}>
+              <Stack sx={{ gap:".4em"}}>
+                <Box sx={{backgroundColor:"rgb(16, 16, 83)", color:"wheat",padding:"5px", margin:"2px",alignItems:"center" , border:"3px solid gray"}}>
+                <Typography sx={{margin:"3px", fontSize:"1em" }}>TO: {item.to1}</Typography>
+                <Typography sx={{ color:"white", fontSize:"1em", margin:"1px"}}>DATE: {item.date1}</Typography>
+                </Box>
+                
+                
+                
+                <Box border="1px solid grey" margin="4px">
+                
+                <Typography sx={{ color:"wheat", margin:"3px"}}>{item.info1}</Typography>
+                </Box>
+                <Box color="red">
+                <Delete onClick={() => deleteItem2(item.id)} size="20px"/>
+                </Box>
+              </Stack>
+              </Box>
+             </view>
+        ))}
+ 
  
    </Box>
    

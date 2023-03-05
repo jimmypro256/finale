@@ -71,10 +71,10 @@ function Comm(){
   
 
 <Box  sx={{backgroundColor:"rgb(16, 16, 83)", padding:"20px",  margin:"5px", paddingTop:"6px", marginTop:"35px"}}>
- <Stack sx={{margin:"15px", gap:"1em"}}>
-  <Box sx={{backgroundColor:"darkblue", color:"wheat", height:"6vh",padding:"4px", margin:"5px",display:"flex", justifyContent:"space-between",alignItems:"center" , border:"1px solid gray"}}>
-  <Typography sx={{margin:"7px" }}>{general_communications.to}</Typography>
-  <Typography sx={{ color:"white", margin:"7px"}}>{general_communications.date}</Typography>
+ <Stack sx={{margin:"10px", gap:"1em"}}>
+  <Box sx={{backgroundColor:"darkblue", color:"wheat",padding:"10px", margin:"5px",alignItems:"center" , border:"1px solid gray"}}>
+  <Typography sx={{margin:"3px", fontSize:".8em" }}>TO: {general_communications.to}</Typography>
+  <Typography sx={{ color:"white", fontSize:".8em", margin:"3px"}}>DATE: {general_communications.date}</Typography>
   </Box>
   
    

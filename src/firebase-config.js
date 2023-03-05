@@ -1,26 +1,26 @@
-import { initializeApp } from "firebase/app";
-import 'firebase/firestore';
-import { getAuth } from "firebase/auth";
-import { getStorage } from "firebase/storage";
+// import { initializeApp } from "firebase/app";
+// import 'firebase/firestore';
+// import { getAuth } from "firebase/auth";
+// import { getStorage } from "firebase/storage";
 
 
 
-const firebaseConfig = {
-  apiKey: "AIzaSyDD4yCvIxjXgbn3MlrQrEQZNkY21ErD4hA",
-  authDomain: "guild-e664e.firebaseapp.com",
-  projectId: "guild-e664e",
-  storageBucket: "guild-e664e.appspot.com",
-  messagingSenderId: "727850922512",
-  appId: "1:727850922512:web:b41e54681face889879095",
-  measurementId: "G-826ZZZRV7S"
-};
+// const firebaseConfig = {
+//   apiKey: "AIzaSyDD4yCvIxjXgbn3MlrQrEQZNkY21ErD4hA",
+//   authDomain: "guild-e664e.firebaseapp.com",
+//   projectId: "guild-e664e",
+//   storageBucket: "guild-e664e.appspot.com",
+//   messagingSenderId: "727850922512",
+//   appId: "1:727850922512:web:b41e54681face889879095",
+//   measurementId: "G-826ZZZRV7S"
+// };
 
-const app = initializeApp(firebaseConfig);
+// const app = initializeApp(firebaseConfig);
 
-export const auth=getAuth()
-export const storage = getStorage(app);
+// export const auth=getAuth()
+// export const storage = getStorage(app);
 
-export default app;
+// export default app;
 
 
 
@@ -44,3 +44,28 @@ export default app;
 // const app = initializeApp(firebaseConfig);
 
 // export default app*/
+
+
+import { initializeApp } from "firebase/app";
+import 'firebase/firestore';
+import { getAuth } from "firebase/auth";
+import { getStorage } from "firebase/storage";
+
+
+const firebaseConfig = {
+  apiKey: "AIzaSyCD_vnLM5anNad91PTClMQSuUTU7VTPsfQ",
+  authDomain: "final-642fc.firebaseapp.com",
+  projectId: "final-642fc",
+  storageBucket: "final-642fc.appspot.com",
+  messagingSenderId: "598157525979",
+  appId: "1:598157525979:web:36dd431c0b959f93f61dfe",
+  measurementId: "G-LL2Q0F6G03"
+};
+
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+
+export const auth=getAuth()
+export const storage = getStorage(app);
+
+export default app;

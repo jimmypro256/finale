@@ -1,6 +1,6 @@
 import React, {useState} from 'react'
 import '../App.css'
-import { Box,Typography, Stack, Button, TextField } from '@mui/material'
+import { Box,Typography, Stack, Button, TextField,Backdrop, CircularProgress } from '@mui/material'
 import app from '../firebase-config'
 import {collection, addDoc,getFirestore} from 'firebase/firestore'
 import { Link, useLocation, useNavigate  } from 'react-router-dom'
@@ -16,15 +16,16 @@ function Login(){
   const db=getFirestore(app)
 
 
-
+  const [loader, setLoader] = useState(false)
         // friendly username
   const [error, setError] =useState(false)
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
   const navigate =useNavigate()
-    const registerForm= async(e) =>{
+
+    const loginForm= async(e) =>{
       e.preventDefault()
-   
+   setLoader(true)
       const auth = getAuth();
       signInWithEmailAndPassword(auth, email, password)
         .then((userCredential) => {
@@ -36,10 +37,12 @@ function Login(){
           else{
             navigate("/admin")
           }
+          setLoader(false)
      
         })
         .catch((error) => {
         setError(true)
+        setLoader(false)
         });
     }
 
@@ -51,8 +54,13 @@ function Login(){
 
   return(
 
+
+
    
  <Box className="loginbg">
+     <Backdrop open={loader}>
+        <CircularProgress />
+      </Backdrop>
    
    <Box textAlign="center" marginTop="100px"  >
 
@@ -66,7 +74,7 @@ function Login(){
 
 <Box marginTop="30px">
 
-<form onSubmit={registerForm}>
+<form onSubmit={loginForm}>
      
     <Stack backgoundColor="white" boxShadow="0 0 10 black" width="96%" margin="auto" gap="2em">
       <TextField className='login_input' label="username" value={email} onChange={(e)=>setEmail(e.target.value)}></TextField>

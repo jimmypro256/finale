@@ -321,6 +321,73 @@ const handlePublish3 = () => {
 };
 
 
+  // change guild president
+
+ 
+  const [formData4, setFormData4] = useState({
+    name: "",
+    createdAt: Timestamp.now().toDate(),
+  });
+  
+  
+  
+  const handleChange4 = (e) => {
+   setFormData4({ ...formData4, [e.target.name]:e.target.value });
+  };
+  
+  const handleImageChange4 = (e) => {
+    setFormData4({ ...formData4, image: e.target.files[0] });
+  };
+  
+  const handlePublish4 = () => {
+    
+    const storageRef = ref(
+      storage,
+      `/guildpresident/${Date.now()}${formData4.image.name}`
+    );
+  
+    const uploadImage = uploadBytesResumable(storageRef, formData4.image);
+  
+    uploadImage.on(
+      "state_changed",
+      (snapshot) => {
+        const progressPercent = Math.round(
+          (snapshot.bytesTransferred / snapshot.totalBytes) * 100
+        );
+        setProgress(progressPercent);
+      },
+      (err) => {
+        console.log(err);
+      },
+      () => {
+        setFormData4({
+            name: "",
+           
+        });
+  
+        getDownloadURL(uploadImage.snapshot.ref).then((url) => {
+          const articleRef = collection(db, "guild_president");
+          addDoc(articleRef, {
+            name: formData4.name,
+          
+            imageUrl: url,
+            createdAt: Timestamp.now().toDate(),
+           
+          })
+            .then(() => {
+              toast("profile added successfully", { type: "success" });
+              setProgress(0);
+            })
+            .catch((err) => {
+              toast("Error adding profile", { type: "error" });
+            });
+        });
+      }
+    );
+  };
+  
+
+
 
 
 
@@ -400,6 +467,30 @@ const handlePublish3 = () => {
       getAlldata3()
     }, []);
       
+
+        // guild president
+        const [data4, setData4] = useState([]);
+        const getAlldata4=()=> {
+          getDocs(collection(db, "guild_president")).then(docSnap => {
+            let users = [];
+            docSnap.forEach((doc)=> {
+                users.push({ ...doc.data(), id:doc.id })
+            });
+            setData4(users);
+          });
+        };
+        
+        useEffect(()=>{
+          getAlldata4()
+        }, []);
+
+
+         //  delete giuld president
+    const deleteItem4=async(id)=>{
+      await deleteDoc(doc(db, "guild_president", id));
+      
+      getAlldata4();
+    }
 
 
     //  delete executive
@@ -662,6 +753,74 @@ add STATE MINISTERS */}
 
 
 
+        {/* ADD guild president */}
+
+
+<Box>
+           <Typography textAlign="center" marginTop="60px" fontWeight="bold">ADD GUILD PRESIDENT</Typography>
+
+
+           <Stack backgoundColor="white" boxShadow="0 0 10 black" width="94%" margin="auto" gap="2em">
+            <TextField label="FULL NAME"  type="text"
+              name="name"
+              value={formData4.name}
+              onChange={(e) => handleChange4(e)}>
+              </TextField>
+
+
+
+
+         
+          <label htmlFor="">PHOTO</label>
+          <input
+            type="file"
+            name="image"
+            accept="image/*"
+            onChange={(e) => handleImageChange4(e)}
+            />
+
+
+          {progress === 0 ? null : (
+            <div className="progress">
+              <div
+                className="progress-bar progress-bar-striped mt-2"
+                style={{ width: `${progress}%` }}
+              >
+                {`uploading image ${progress}%`}
+              </div>
+            </div>
+          )}
+            
+
+            <Button variant='contained'  onClick={handlePublish4}>ADD</Button>
+
+          </Stack>
+        </Box>
+        
+
+          <Typography textAlign="center" marginTop="60px" fontWeight="bold">VIEW AND DELETE GUILD PRESIDENT</Typography>
+
+            {/* GUILD PRESIDENT */}
+            {data4.map(item => (
+            <view key={item.id}  getAlldata4={getAlldata4} >
+            <Box height="60vh" margin="5px" boxShadow="0 0 10px gray" paddingTop="10px" border="1px solid blue">
+
+            <Stack border="1px solid white" height="55vh" margin="10px" >
+              <Stack width="98%" margin="auto" alignItems="center" color="red">
+             
+             <img style={{width:"78%", height:"39vh", boxShadow:"0 0 20px black",border:"4px solid gray"}} src={item.imageUrl} alt="president" /> 
+                <Typography height="10vh" boxShadow="0 0 5px black" backgroundColor="rgb(16, 16, 83)" color="white" sx={{width:"78%", textAlign:"center" ,border:"4px solid black"}}>GUILD PRESIDENT<br></br> H.E {item.name}</Typography>
+                <Delete onClick={() => deleteItem4(item.id)} size="20px"/>
+              </Stack>
+            </Stack>
+            </Box>
+            </view>
+            ))}
+
+
+
+
+
         {/* view and delete section */}
 
         <Typography textAlign="center" marginTop="60px" fontWeight="bold">VIEW AND DELETE EXECUTIVES</Typography>
@@ -774,35 +933,9 @@ add STATE MINISTERS */}
              </Box>
              </view>
         ))}
+
+
+
     </Box>
-
-
-
-
-
-// <Typography>out put</Typography>
-
-//         <View>
-  
-//   {data.map(item => (
-//     <View key={item.id}  getAlldata={getAlldata}>
-//       <Stack direction="row" gap="20px">
-      
-//       <Text>{item.title}</Text>
-//       <Text>{item.description}</Text>
-//       <img src={item.imageUrl}
-//       alt="item.title"
-//        width="100px" height="100px"></img>
-    
-     
-//       <button title="Delete" onClick={() => deleteItem(item.id)} >DELETE</button>
-//       </Stack>
-     
-//     </View>
-//   ))}
-// </View>
-
-      
-//     </div>
   );
 }

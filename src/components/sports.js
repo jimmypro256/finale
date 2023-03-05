@@ -150,9 +150,9 @@ function Sports(){
 
 <Box sx={{ paddingBottom:"10px"}}>
 <Typography textAlign="center" >GAMES AND SPORTS AROUND CAMPUS</Typography>
-<Box  sx={{backgroundColor:"rgb(16, 16, 83)", height:"54vh", margin:"7px"}}>
+<Box  sx={{backgroundColor:"rgb(16, 16, 83)",padding:"10px", margin:"7px"}}>
   <Stack sx={{margin:"15px", gap:"1em"}}>
-    <Typography sx={{ color:"wheat", border:"1px solid gray", height:"3vh",paddingBottom:"15px", backgroundColor:"blue", margin:"5px",fontSize:"18px", textAlign:"center" }}>GULU UNIVERSITY GAMES UNION</Typography>
+    <Typography sx={{ color:"wheat", border:"1px solid gray",padding:"10px", backgroundColor:"blue", margin:"5px",fontSize:"1.2em", textAlign:"center" }}>GULU UNIVERSITY GAMES UNION</Typography>
     <Typography sx={{ color:"wheat", margin:"3px", border:"3px solid grey",height:"40vh"}}><img style={{width:"100%", height:"100%"}} src={require('../images/game1.jpg')} alt="" /></Typography>
   </Stack>
 </Box>

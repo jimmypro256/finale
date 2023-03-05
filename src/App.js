@@ -8,8 +8,7 @@ import Comm from "./components/comm";
 import Social from "./components/social";
 import Spirit from "./components/spirit";
 import Sports from "./components/sports";
-import Admin from "./components/admin"
-import ButtonAppBar from "./components/appbar1"
+import Admin from "./components/admin";
 import SportsAdmin from "./components/sports_admin";
 import Suggest from "./components/suggest"
 import Login from "./components/login"
@@ -17,8 +16,9 @@ import Signup from "./components/signup";
 import CommAdmin from "./components/comm_admin";
 import HomeAdmin from "./components/home_admin";
 import SuggestionBox from "./components/suggestion_box";
-
-
+import SocialAdmin from "./components/social_admin";
+import HostelAdmin from "./components/hostel_admin";
+import SpiritAdmin from "./components/spirit_admin";
 export default function App(){
 
   const currentUser=false;
@@ -50,7 +50,10 @@ export default function App(){
       <Route path='/comm_admin' element={<CommAdmin/>}/>
       <Route path='/home_admin' element={<HomeAdmin/>}/>
       <Route path='/suggestion_box' element={<SuggestionBox/>}/>
-   
+      <Route path='/social_admin' element={<SocialAdmin/>}/>
+      <Route path='/hostel_admin' element={<HostelAdmin/>}/>
+      <Route path='/spirit_admin' element={<SpiritAdmin/>}/>
+
      </Routes>
     
     

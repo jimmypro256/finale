@@ -45,6 +45,46 @@ export default function SimpleAccordion() {
     useEffect(()=>{
       getAlldata1()
     }, []);
+
+
+
+     // State fetch
+     const [data2, setData2] = useState([]);
+     const getAlldata2=()=> {
+       getDocs(collection(db, "State_leaders")).then(docSnap => {
+         let users = [];
+         docSnap.forEach((doc)=> {
+             users.push({ ...doc.data(), id:doc.id })
+         });
+         setData2(users);
+       });
+     };
+     
+     useEffect(()=>{
+       getAlldata2()
+     }, []);
+
+
+
+
+      // Legislator fetch
+    const [data3, setData3] = useState([]);
+    const getAlldata3=()=> {
+      getDocs(collection(db, "Legislator_leaders")).then(docSnap => {
+        let users = [];
+        docSnap.forEach((doc)=> {
+            users.push({ ...doc.data(), id:doc.id })
+        });
+        setData3(users);
+      });
+    };
+    
+    useEffect(()=>{
+      getAlldata3()
+    }, []);
+      
+
+
   return (
     <div>
       <Accordion backgroundColor="red" color="red">
@@ -129,20 +169,29 @@ export default function SimpleAccordion() {
           <Typography>STATE MINISTERS</Typography>
         </AccordionSummary>
         <AccordionDetails>
-        <Box border="2px solid darkblue" backgroundColor="lightblue" marginTop="10px">
-              <Stack direction="row" gap=".7em">
-                <Box border="1px solid gray" height="20vh" backgroundColor="black" width="130px" margin="3px">
+         {/* STATE MINISTERS */}
+         {data2.map(item => (
+                        <view key={item.id}  getAlldata2={getAlldata2} >
+                          <Box border="4px solid gray" backgroundColor="rgb(1, 1, 26)"  marginTop="10px" width="95%" margin="10px">
+                            <Stack direction="row" gap=".7em">
+                              <Box border="1px solid gray" height="20vh" backgroundColor="black" width="130px" margin="3px">
+                                <img src={item.imageUrl}
+                                alt="item.title"
+                                width="100%" height="100%"></img>
+                            
+                              </Box>
 
-                </Box>
+                              <Stack gap="1em" margin="3px" color="red">
+                                <Typography color="white">{item.name}</Typography>
+                                <Typography color="white">{item.position}</Typography>
+                                <Typography color="white">{item.tel}</Typography>
+                                
+                              </Stack>
 
-                <Stack gap="1em" margin="3px">
-                  <Typography>HON OKELLO SIMON PETER</Typography>
-                  <Typography>MINISTER OF INTERNAL AFFAIRS</Typography>
-                  <Typography>CONTACTS: 07989608067</Typography>
-                </Stack>
-
-              </Stack>
-             </Box>
+                            </Stack>
+                          </Box>
+                          </view>
+                      ))}
 
         </AccordionDetails>
       </Accordion>
@@ -156,20 +205,29 @@ export default function SimpleAccordion() {
         </AccordionSummary>
         <AccordionDetails>
 
-        <Box border="2px solid darkblue" backgroundColor="lightblue" marginTop="10px">
+        {/* LEGISLATORS */}
+        {data3.map(item => (
+           <view key={item.id}  getAlldata3={getAlldata3} >
+             <Box border="4px solid gray" backgroundColor="rgb(1, 1, 26)"  marginTop="10px" width="95%" margin="10px">
               <Stack direction="row" gap=".7em">
                 <Box border="1px solid gray" height="20vh" backgroundColor="black" width="130px" margin="3px">
-
+                  <img src={item.imageUrl}
+                  alt="item.title"
+                  width="100%" height="100%"></img>
+              
                 </Box>
 
-                <Stack gap="1em" margin="3px">
-                  <Typography>HON OKELLO SIMON PETER</Typography>
-                  <Typography>MINISTER OF INTERNAL AFFAIRS</Typography>
-                  <Typography>CONTACTS: 07989608067</Typography>
+                <Stack gap="1em" margin="3px" color="red">
+                  <Typography color="white">{item.name}</Typography>
+                  <Typography color="white">{item.position}</Typography>
+                  <Typography color="white">{item.tel}</Typography>
+              
                 </Stack>
 
               </Stack>
              </Box>
+             </view>
+        ))}
         </AccordionDetails>
       </Accordion>
      

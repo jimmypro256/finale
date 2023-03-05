@@ -19,7 +19,7 @@ import ButtonAppBar from './appbar1'
   return(
 
    
-   <Box className="main" sx={{width:"100%", marginTop:"15px",height:"280vh", background:"antiquewhite" , color:"black" }}>
+   <Box className="main" sx={{width:"100%", marginTop:"15px", paddingBottom:"10px", background:"antiquewhite" , color:"black" }}>
     
     <ButtonAppBar/>
     <Box textAlign="center" marginTop="100px" ></Box>
@@ -29,8 +29,8 @@ import ButtonAppBar from './appbar1'
     <Box textAlign="center">
      
     </Box>
-    <Box height="24vh" margin="5px" border="3px solid gray" marginTop="60px" backgroundColor="black" color="white" boxShadow="0 0 12px black">
-             <Typography textAlign="center" color="wheat" margin="10px" border="1px solid gray">QUOTE OF THE DAY</Typography>
+    <Box margin="5px" border="3px solid gray" marginTop="60px" backgroundColor="black" color="white" boxShadow="0 0 12px black">
+             <Typography textAlign="center" color="wheat" margin="10px" border="3px solid gray">QUOTE OF THE DAY</Typography>
              
             <Typography textAlign="center" margin="5px" fontSize="21px">"Do unto others what you want to be done unto you"</Typography>
             <Typography textAlign="center" margin="5px">acts 12:4🤍</Typography>
@@ -39,20 +39,8 @@ import ButtonAppBar from './appbar1'
     
    
       <Box margin="5px">
-      <Typography textAlign="center" fontSize="20px" fontWeight="bold">COMMUNICATIONS</Typography>
-           <Box  sx={{backgroundColor:"rgb(16, 16, 83)", height:"45vh", margin:"1px", paddingTop:"5px", marginTop:"20px"}}>
-              <Stack sx={{margin:"15px", gap:"1em"}}>
-                <Typography sx={{backgroundColor:"darkblue", color:"wheat",border:"1px solid white", height:"5vh",padding:"3px", margin:"2px", fontSize:"18px" }}>FROM: GUCU</Typography>
-                <Box sx={{ border:"1px solid grey",height:"30vh"}}>
-                   <Typography sx={{ color:"wheat", margin:"7px"}}>information</Typography>
-                </Box>
-              </Stack>
-            </Box>
-               
-                  
-
-  
-
+      
+              
                   <Typography textAlign="center" fontSize="20px" fontWeight="bold"marginTop="13px">WEEKLY PROGRAMS</Typography>
                   <Box color="white" sx={{backgroundColor:"rgb(16, 16, 83)", height:"80vh"}}>
                     <Stack>
@@ -198,7 +186,7 @@ import ButtonAppBar from './appbar1'
 
 
             <Modal open={open3} onClose={()=>setOpen3(false)} sx={{display:"flex", justifyContent:"center", alignItems:"center", flexFlow:"column"}}>
-                    <Box  sx={{width:"300px", height:"55vh", backgroundColor:"white", padding:"1em", border:"none", outline:"none"}}>
+                    <Box  sx={{width:"97%", backgroundColor:"white", padding:"1em", border:"none", outline:"none"}}>
                        <Stack sx={{gap:1}}>
                        <Typography textAlign="center">GUCU</Typography>
                         <Typography textAlign="center">WEEKLY PROGRAM</Typography>

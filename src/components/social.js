@@ -1,27 +1,226 @@
-import React,{useState} from 'react'
+import React,{useState, useEffect} from 'react'
 import '../App.css'
-import { Box } from '@mui/system'
-import {Typography,Stack,Modal,TextField,Button} from '@mui/material'
-import {motion} from 'framer-motion'
+
+import CloseIcon from '@material-ui/icons/Close'
+import Add from "@material-ui/icons/Add";
+import { storage } from "../firebase-config";
+import { toast } from "react-toastify";
+
+import {FlatList,  Text, View } from 'react-native-web'
 import ButtonAppBar from './appbar1'
+import { Timestamp, collection, addDoc,getFirestore,getDocs,doc,deleteDoc,orderBy} from "firebase/firestore";
+import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
+import app from "../firebase-config";
 
-
-
-
+import { Box,Typography, Stack, TextField,Button,Modal,Tooltip,Fab,CircularProgress,Backdrop,Snackbar, IconButton} from '@mui/material'
 
 function Social(){
+  const[open1, setOpen1]=useState(false)
+  const[open2, setOpen2]=useState(false)
+  const [progress, setProgress] = useState(0);
+
+// students posts
+
+ 
+const [formData3, setFormData3] = useState({
+  name: "",
+  info: "",
+  createdAt: Timestamp.now().toDate(),
+});
+
+
+
+const handleChange3 = (e) => {
+ setFormData3({ ...formData3, [e.target.name]: e.target.value });
+};
+
+const handleImageChange3 = (e) => {
+  setFormData3({ ...formData3, image: e.target.files[0] });
+};
+
+const handlePublish3 = () => {
+ setOpen1(true)
+ setOpen(false)
+
+  const storageRef = ref(
+    storage,
+    `/posts/${Date.now()}${formData3.image.name}`
+  );
+
+  const uploadImage = uploadBytesResumable(storageRef, formData3.image);
+
+  uploadImage.on(
+    "state_changed",
+    (snapshot) => {
+      const progressPercent = Math.round(
+        (snapshot.bytesTransferred / snapshot.totalBytes) * 100
+      );
+      setProgress(progressPercent);
+    },
+    (err) => {
+      console.log(err);
+    },
+    () => {
+      setFormData3({
+          name: "",
+          info: "",
+        
+      });
+
+      getDownloadURL(uploadImage.snapshot.ref).then((url) => {
+        const articleRef = collection(db, "posts");
+        addDoc(articleRef, {
+          name: formData3.name,
+          info: formData3.info,
+         
+          imageUrl: url,
+          createdAt: Timestamp.now().toDate(),
+         
+        })
+          .then(() => {
+            toast("profile added successfully", { type: "success" });
+            setProgress(0);
+            setOpen1(false)
+            setOpen2(true)
+          })
+          .catch((err) => {
+            toast("Error adding profile", { type: "error" });
+          });
+      });
+    }
+  );
+};
  
     const [open, setOpen] = useState(false)
 
+    let db= getFirestore(app)
+
+    // trending fetch
+    const [data, setData] = useState([]);
+    const getAlldata=()=> {
+      getDocs(collection(db, "top_songs")).then(docSnap => {
+        let users = [];
+        docSnap.forEach((doc)=> {
+            users.push({ ...doc.data(), id:doc.id })
+        });
+        setData(users);
+      });
+    };
+    
+    useEffect(()=>{
+      getAlldata()
+    }, []);
+
+   // movies fetch
+   const [data1, setData1] = useState([]);
+   const getAlldata1=()=> {
+     getDocs(collection(db, "movies")).then(docSnap => {
+       let users = [];
+       docSnap.forEach((doc)=> {
+           users.push({ ...doc.data(), id:doc.id })
+       });
+       setData1(users);
+     });
+   };
+   
+   useEffect(()=>{
+     getAlldata1()
+   }, []);
+
+
+    // birthday
+    const [data2, setData2] = useState([]);
+    const getAlldata2=()=> {
+      getDocs(collection(db, "birthdays")).then(docSnap => {
+        let users = [];
+        docSnap.forEach((doc)=> {
+            users.push({ ...doc.data(), id:doc.id })
+        });
+        setData2(users);
+      });
+    };
+    
+    useEffect(()=>{
+      getAlldata2()
+    }, []);
+
+
+     // posts
+     const [data3, setData3] = useState([]);
+     const getAlldata3=()=> {
+       getDocs(collection(db, "posts")).then(docSnap => {
+         let users = [];
+         docSnap.forEach((doc)=> {
+             users.push({ ...doc.data(), id:doc.id })
+         });
+         setData3(users);
+       });
+     };
+     
+     useEffect(()=>{
+       getAlldata3()
+     }, []);
+
+     const handleClose = ()=>{
+      setOpen2(false)
+      getAlldata3();
+
+  }
   
+  const action = (
+      <React.Fragment>
+        <Button color="secondary" size="small" onClick={handleClose}>
+          UNDO
+        </Button>
+        <IconButton
+          size="small"
+          aria-label="close"
+          color="inherit"
+          onClick={handleClose}
+        >
+          <CloseIcon fontSize="small" />
+        </IconButton>
+      </React.Fragment>
+    );
+
+     const renderItem = ({ item }) => (
+    <View key={item.id} getAlldata3={getAlldata3}>
+      <Stack sx={{backgroundColor:" rgb(16, 16, 83)", color:"wheat",border:"2px solid white"}}>
+        <Stack direction="row" justifyContent="space-between" alignItems="center" marginRight="10px">
+          <Stack direction="row" margin="10px" sx={{gap:"1em" , alignItems:"center"}}>
+            <Box sx={{}} > <img style={{backgroundColor:"wheat", width:"50px", height:"50px", borderRadius:"25px"}} src={require('../images/aa.jpg')} alt="" /></Box>
+            <Typography >{item.name}</Typography>
+          </Stack>
+          {/* <Typography color="#fff" fontSize=".5em">{item.createdAt}</Typography> */}
+        </Stack>
+        <Typography color="#fff" margin="10px">
+          {item.info}
+        </Typography>
+        <Box height="60vh" sx={{backgroundColor:"gray", margin:"10px" ,border:"1px solid white"}} >
+          <img style={{width:"100%", height:"60vh"}} src={item.imageUrl} alt="post" />
+        </Box>
+        <Box sx={{height:"70px", backgroundColor:"darkblue",border:"1px solid white", margin:"10px" , marginTop:"17px"}}>
+          <Stack direction="row" justifyContent="space-between" margin="7px" alignItems="center">
+            <Box>
+              <Typography className="like" fontSize="30px" >💬</Typography>
+            </Box>
+            <button type='button' onClick={()=>setOpen(true)}>comment</button>
+          </Stack>
+        </Box>
+      </Stack>
+    </View>
+  );
+       
+ 
 
   return(
 
    
-   <Box className="main" sx={{width:"100%", marginTop:"15px",height:"1000vh", background:"antiquewhite" , color:"black" }}>
+   <Box className="main" sx={{width:"100%", marginTop:"15px", background:"antiquewhite" , color:"black" }}>
     
     <ButtonAppBar/>
     <Box textAlign="center" marginTop="80px" ></Box>
+    <Typography textAlign="center" fontSize="1.6em" fontWeight="600" marginBottom="10px">GU | SOCIAL HUB</Typography>
     <Typography textAlign="center" >TRENDING, ENTERTAINMENT, GOSSIP AND LIFESTYLE AROUND CAMPUS</Typography>
     
  
@@ -29,227 +228,60 @@ function Social(){
  
 
        <Box margin="5px">
-          <Box height="170vh">
-            <Typography textAlign="center" boxShadow="0 0 10px white" backgroundColor="black" border="1px solid white" fontSize="1.2em" color="antiquewhite" padding="5px">CAMPUS TOP 10 SONGS</Typography>
+       <Typography textAlign="center" boxShadow="0 0 10px white" backgroundColor="black" border="3px solid white" fontSize="1.2em" color="antiquewhite" padding="5px">CAMPUS TOP 10 SONGS</Typography>
+       {data.map(item => (
+           <view key={item.id}  getAlldata={getAlldata} >
+            
+          <Box >
+          
           
             <Box height="14vh" border="1px solid white" backgroundColor="black" marginTop="7px" display="flex" alignItems="center" gap="2.7em">
 
                   <Box display="flex" alignItems="center" gap="1.3em">
-                  <Typography color="white" fontSize="24px">1.</Typography>
+                  <Typography color="white" fontSize="24px">{item.position}</Typography>
                   <Box height="12vh" margin="3px" width="100px" backgroundColor="gray" border="1px solid white"  >
-                    <img style={{ width:"100%", height:"100%"}} src={require('../images/trend1.jpg')} alt=""/>
+                    <img style={{ width:"100%", height:"100%"}} src={item.imageUrl} alt="song"/>
                   </Box>
                   </Box>
-                  <Typography color="lawngreen" marginRight="5px">Last Last Burnaboy</Typography>
+                  <Typography color="lawngreen" marginRight="5px">{item.song}</Typography>
+                
 
             </Box>
-
-            <Box height="14vh" border="1px solid white" backgroundColor="black" marginTop="7px" display="flex" alignItems="center" gap="2.7em">
-
-                  <Box display="flex" alignItems="center" gap="1.3em">
-                  <Typography color="white" fontSize="24px">2.</Typography>
-                  <Box height="12vh" margin="3px" width="100px" backgroundColor="gray" border="1px solid white"  >
-                    <img style={{ width:"100%", height:"100%"}} src={require('../images/trend2.jpg')} alt=""/>
-                  </Box>
-                  </Box>
-                  <Typography color="lawngreen" marginRight="5px">Electricity PHEELZ x Davido</Typography>
-
-            </Box>
-
-            <Box height="14vh" border="1px solid white" backgroundColor="black" marginTop="7px" display="flex" alignItems="center"gap="2.7em">
-
-                  <Box display="flex" alignItems="center" gap="1.3em">
-                  <Typography color="white" fontSize="24px">3.</Typography>
-                  <Box height="12vh" margin="3px" width="100px" backgroundColor="gray" border="1px solid white"  >
-                    <img style={{ width:"100%", height:"100%"}} src={require('../images/trend3.jpg')} alt=""/>
-                  </Box>
-                  </Box>
-                  <Typography color="lawngreen" marginRight="5px">Bandana Fireboy DML x Asake</Typography>
-
-            </Box>
-
-            <Box height="14vh" border="1px solid white" backgroundColor="black" marginTop="7px" display="flex" alignItems="center"gap="2.7em">
-
-                  <Box display="flex" alignItems="center" gap="1.3em">
-                  <Typography color="white" fontSize="24px">4.</Typography>
-                  <Box height="12vh" margin="3px" width="100px" backgroundColor="gray" border="1px solid white"  >
-                    <img style={{ width:"100%", height:"100%"}} src={require('../images/trend4.jpg')} alt=""/>
-                  </Box>
-                  </Box>
-                  <Typography color="lawngreen" marginRight="5px">Nsimbudde Eddy Kenzo</Typography>
-
-            </Box>
-
-            <Box height="14vh" border="1px solid white" backgroundColor="black" marginTop="7px" display="flex" alignItems="center" gap="2.7em">
-
-                  <Box display="flex" alignItems="center" gap="1.3em">
-                  <Typography color="white" fontSize="24px">5.</Typography>
-                  <Box height="12vh" margin="3px" width="100px" backgroundColor="gray" border="1px solid white"  >
-                    <img style={{ width:"100%", height:"100%"}} src={require('../images/trend5.jpg')} alt=""/>
-                  </Box>
-                  </Box>
-                  <Typography color="lawngreen" marginRight="5px">Sugarcane Camidoh x Phantom X Mayorkun</Typography>
-
-            </Box>
-
-            <Box height="14vh" border="1px solid white" backgroundColor="black" marginTop="7px" display="flex" alignItems="center" gap="2.7em">
-
-                  <Box display="flex" alignItems="center" gap="1.3em">
-                  <Typography color="white" fontSize="24px">6.</Typography>
-                  <Box height="12vh" margin="3px" width="100px" backgroundColor="gray" border="1px solid white"  >
-                    <img style={{ width:"100%", height:"100%"}} src={require('../images/trend6.jpg')} alt=""/>
-                  </Box>
-                  </Box>
-                  <Typography color="lawngreen" marginRight="5px">Calm Down Remix Rema X Selena Gomez</Typography>
-
-            </Box>
-
-            <Box height="14vh" border="1px solid white" backgroundColor="black" marginTop="7px" display="flex" alignItems="center" gap="2.7em">
-
-                  <Box display="flex" alignItems="center" gap="1.3em">
-                  <Typography color="white" fontSize="24px">7.</Typography>
-                  <Box height="12vh" margin="3px" width="100px" backgroundColor="gray" border="1px solid white"  >
-                    <img style={{ width:"100%", height:"100%"}} src={require('../images/trend7.jpg')} alt="" />
-                  </Box>
-                  </Box>
-                  <Typography color="lawngreen" marginRight="5px">Terminator Asake</Typography>
-
-            </Box>
-
-            <Box height="14vh" border="1px solid white" backgroundColor="black" marginTop="7px" display="flex" alignItems="center" gap="2.7em">
-
-                  <Box display="flex" alignItems="center" gap="1.3em">
-                  <Typography color="white" fontSize="24px">8.</Typography>
-                  <Box height="12vh" margin="3px" width="100px" backgroundColor="gray" border="1px solid white"  >
-                    <img style={{ width:"100%", height:"100%"}} src={require('../images/trend8.jpg')} alt="" />
-                  </Box>
-                  </Box>
-                  <Typography color="lawngreen" marginRight="5px">I'm Messed Omahlay</Typography>
-
-            </Box>
-
-            <Box height="14vh" border="1px solid white" backgroundColor="black" marginTop="7px" display="flex" alignItems="center" gap="2.7em">
-
-                  <Box display="flex" alignItems="center" gap="1.3em">
-                  <Typography color="white" fontSize="24px">9.</Typography>
-                  <Box height="12vh" margin="3px" width="100px" backgroundColor="gray" border="1px solid white"  >
-                    <img style={{ width:"100%", height:"100%"}} src={require('../images/oromo.jpg')} alt=""/>
-                  </Box>
-                  </Box>
-                  <Typography color="lawngreen" marginRight="5px">Oromo Eddy Wizzy</Typography>
-
-            </Box>
-
-            <Box height="14vh" border="1px solid white" backgroundColor="black" marginTop="7px" display="flex" alignItems="center" gap="2.7em">
-
-                  <Box display="flex" alignItems="center" gap=".5em">
-                  <Typography color="white" fontSize="24px">10.</Typography>
-                  <Box height="12vh" margin="3px" width="100px" backgroundColor="gray" border="1px solid white"  >
-                    <img style={{ width:"100%", height:"100%"}} src={require('../images/trend10.jpg')} alt=""/>
-                  </Box>
-                  </Box>
-                  <Typography color="lawngreen" marginRight="5px">its plenty Burnaboy</Typography>
-
-            </Box>
-
 
 
          
           </Box>
+             </view>
+        ))}
+
+
 
 
       
 <br></br>
-       <Box backgroundColor="black" height="700vh" paddingTop="5px">
-          <Typography textAlign="center" boxShadow="0 0 10px white" margin="3px" backgroundColor="black" border="1px solid white" fontSize="1.5em" color="antiquewhite" padding="5px">TRENDING MOVIES</Typography>
+      {/* movies */}
+      <Box backgroundColor="black" paddingTop="5px">
+      <Typography textAlign="center" boxShadow="0 0 10px white" margin="3px" backgroundColor="black" border="1px solid white" fontSize="1.5em" color="antiquewhite" padding="5px">TRENDING MOVIES</Typography>
+              
+      {data1.map(item => (
+           <view key={item.id}  getAlldata1={getAlldata1} >
               
             <Box marginTop="26px">
                 <Box height="40vh" border="1px solid white" margin="5px" marginTop="16px">
-                <img style={{ width:"100%", height:"100%"}} src={require('../images/gray.jpg')} alt=""/>
+                <img style={{ width:"100%", height:"100%"}} src={item.imageUrl} alt="url"/>
 
                 </Box>
-                <Typography margin="5px" color="hotpink">THE GRAY MAN 2022:<Typography color="white">When the CIA's top asset -- his identity known to no one -- uncovers agency secrets, he triggers a global hunt by assassins set loose by his ex-colleague</Typography></Typography>
-            </Box>
+                <Typography margin="5px" color="hotpink">{item.name}:<Typography color="white">{item.description}</Typography></Typography>
+               </Box>
 
 
-            <Box marginTop="26px">
-                <Box height="40vh" border="1px solid white" margin="5px" marginTop="16px">
-                <img style={{ width:"100%", height:"100%"}} src={require('../images/prey.jpg')} alt=""/>
-                </Box>
-                <Typography margin="5px" color="hotpink">PREY 2022<Typography color="white">A skilled Comanche warrior protects her tribe from a highly evolved alien predator that hunts humans for sport, fighting against wilderness, dangerous colonisers and this mysterious creature to keep her people safe.</Typography></Typography>
-            </Box>
+           
+             </view>
+        ))}
+
+      </Box>
 
 
-            <Box marginTop="26px">
-                <Box height="40vh" border="1px solid white" margin="5px" marginTop="16px">
-                <img style={{ width:"100%", height:"100%"}} src={require('../images/adam.jpg')} alt=""/>
-                </Box>
-                <Typography margin="5px" color="hotpink">BLACK ADAM 2022<Typography color="white">In ancient Kahndaq, Teth Adam was bestowed the almighty powers of the gods. After using these powers for vengeance, he was imprisoned, becoming Black Adam. Nearly 5,000 years have passed, and Black Adam has gone from man to myth to legend.</Typography></Typography>
-            </Box>
-
-
-
-            <Box marginTop="26px">
-                <Box height="40vh" border="1px solid white" margin="5px" marginTop="16px">
-                <img style={{ width:"100%", height:"100%"}} src={require('../images/bullet.jpg')} alt=""/>
-
-                </Box>
-                <Typography margin="5px" color="hotpink">BULLET TRAIN 2022<Typography color="white">Ladybug is an unlucky assassin who's determined to do his job peacefully after one too many gigs has gone off the rails. Fate, however, may have other plans as his latest mission puts him on a collision course with lethal adversaries from around the globe -- all with connected yet conflicting objectives -- on the world's fastest train.</Typography></Typography>
-            </Box>
-
-
-            <Box marginTop="26px">
-                <Box height="40vh" border="1px solid white" margin="5px" marginTop="16px">
-                <img style={{ width:"100%", height:"100%"}} src={require('../images/halo.jpg')} alt=""/>
-
-                </Box>
-                <Typography margin="5px" color="hotpink">HALLOWEEN ENDS 2022<Typography color="white">Four years after her last encounter with masked killer Michael Myers, Laurie Strode is living with her granddaughter and trying to finish her memoir. Myers hasn't been seen since, and Laurie finally decides to liberate herself from rage and fear and embrace life. However, when a young man stands accused of murdering a boy that he was babysitting, it ignites a cascade of violence and terror that forces Laurie to confront the evil she can't control.</Typography></Typography>
-            </Box>
-
-
-
-            <Box marginTop="26px">
-                <Box height="40vh" border="1px solid white" margin="5px" marginTop="16px">
-                <img style={{ width:"100%", height:"100%"}} src={require('../images/beast.jpg')} alt=""/>
-
-                </Box>
-                <Typography margin="5px" color="hotpink">BEAST 2022<Typography color="white">Recently widowed Dr. Nate Daniels and his two teenage daughters travel to a South African game reserve managed by Martin Battles, an old family friend and wildlife biologist. However, what begins as a journey of healing soon turns into a fearsome fight for survival when a lion, a survivor of bloodthirsty poachers, begins stalking them.</Typography></Typography>
-            </Box>
-
-
-            <Box marginTop="26px">
-                <Box height="40vh" border="1px solid white" margin="5px" marginTop="16px">
-                <img style={{ width:"100%", height:"100%"}} src={require('../images/tiv.jpg')} alt=""/>
-
-                </Box>
-                <Typography margin="5px" color="hotpink">KING OF THIEVES 2022<Typography color="white">When a vindictive bandit threatens the peace of a flourishing kingdom, the native mystical and worldly forces must come together to save the day.</Typography></Typography>
-            </Box>
-
-
-            <Box marginTop="26px">
-                <Box height="40vh" border="1px solid white" margin="5px" marginTop="16px">
-                <img style={{ width:"100%", height:"100%"}} src={require('../images/top.jpg')} alt=""/>
-
-                </Box>
-                <Typography margin="5px" color="hotpink">TOP GUN MAVERICK 2022<Typography color="white">After more than 30 years of service as one of the Navy's top aviators, Pete "Maverick" Mitchell is where he belongs, pushing the envelope as a courageous test pilot and dodging the advancement in rank that would ground him. Training a detachment of graduates for a special assignment, Maverick must confront the ghosts of his past and his deepest fears, culminating in a mission that demands the ultimate sacrifice from those who choose to fly it.</Typography></Typography>
-            </Box>
-
-            <Box marginTop="26px">
-                <Box height="40vh" border="1px solid white" margin="5px" marginTop="16px">
-                <img style={{ width:"100%", height:"100%"}} src={require('../images/bill.jpg')} alt=""/>
-
-                </Box>
-                <Typography margin="5px" color="hotpink">BILLIONIARE NANNY 2022<Typography color="white">Top Nigerian TV series 2022</Typography></Typography>
-            </Box>
-
-            <Box marginTop="26px">
-                <Box height="40vh" border="1px solid white" margin="5px" marginTop="16px">
-                <img style={{ width:"100%", height:"100%"}} src={require('../images/chief.jpg')} alt=""/>
-
-                </Box>
-                <Typography margin="5px" color="hotpink">CHIEF DADDY 2018<Typography color="white">When a billionaire industrialist unexpectedly drops dead, his money-crazed family, friends, and staff scramble for their share of his fortune.</Typography></Typography>
-            </Box>
-       </Box>
 
 
 
@@ -265,76 +297,102 @@ function Social(){
 </Box>
 
 <br></br>
-<Box>
-      
-      <Box backgroundColor="black" height="100vh">
-      <Typography textAlign="center" color="wheat" fontWeight="bold" fontSize="24px" margin="4px">TODAYS BIRTHDAY BABY</Typography>
-        <Box margin="5px" height="75vh" border="3px solid hotpink" >
-          <Box border="3px solid lawngreen" height="75vh" >
-            <Box border="3px solid blue" height="75vh" >
+<Typography textAlign="center" marginTop="10px" fontWeight="600">TODAYS BIRTHDAY WISHES</Typography>
+                {/* BDS */}
+                {data2.map(item => (
+                        <view key={item.id}  getAlldata2={getAlldata2} >
+                       <br></br>
+                        <Box>
+                              
+                              <Box backgroundColor="black" height="100vh">
+                              <Typography textAlign="center" fontSize="28px" fontWeight="bold" color="hotpink">🎂🎈HAPPY BIRTHDAY🎈🎂</Typography>
+                                <Box margin="5px" height="75vh" border="3px solid hotpink" >
+                                  <Box border="3px solid lawngreen" height="74vh" >
+                                    <Box border="3px solid blue" height="73.1vh" >
+                                    <img style={{ width:"100%", height:"100%"}} src={item.imageUrl} alt="bd"/>
+                                    </Box>
+                                  </Box>
+                                </Box>
 
-            </Box>
-          </Box>
-        </Box>
-        <Typography textAlign="center" fontSize="28px" fontWeight="bold" color="hotpink">🎂🎈HAPPY BIRTHDAY🎈🎂</Typography>
-        <Typography textAlign="center" fontSize="28px" fontWeight="bold" color="orange">🥰JIMMY PRO🥰</Typography>
-      </Box>
-</Box>
+                                <Typography textAlign="center" fontSize="1.3em" fontWeight="bold" color="orange">🥰{item.name}🥰</Typography>
+                                <Typography textAlign="center" fontSize="1.3em"  color="wheat">{item.faculty}</Typography>
+                               
+                              </Box>
+                        </Box>
 
-<br></br>
+                        <br></br>
+                          </view>
+                      ))}
+
+
 
 
 
 <Typography textAlign="center" marginBottom="5px" boxShadow="0 0 10px white" backgroundColor="black" border="1px solid white" fontSize="1.5em" color="antiquewhite" padding="5px" marginTop="50px">TRENDING & GOSSIP</Typography>
-<Stack sx={{backgroundColor:" rgb(16, 16, 83)", color:"wheat", height:"110vh",border:"2px solid white"}}>
-
-              
-                <Stack direction="row" justifyContent="space-between" alignItems="center" marginRight="10px">
-                <Stack direction="row" margin="10px" sx={{gap:"1em" , alignItems:"center"}}>
-                  <Box sx={{}} > <img style={{backgroundColor:"wheat", width:"50px", height:"50px", borderRadius:"25px"}} src={require('../images/aa.jpg')} alt="" /></Box>
-                  <Typography >@JimmyPro</Typography>
-
-                </Stack>
-
-                <Typography color="#fff" fontSize="13px"> 11/12/2022</Typography>
-                </Stack>
-                <Typography color="#fff" margin="10px">React Native comrade...more ffffffffffffff fffffffff fffffffffffffffffff ffffffffff fffffffffff fffffff ffffff fffffffff ffffffffff</Typography>
-                <Box height="60vh" sx={{backgroundColor:"gray", margin:"10px" ,border:"1px solid white"}} ><img style={{width:"100%", height:"60vh"}} src={require('../images/art4.jpg')} alt="" /></Box>
-                <Box sx={{height:"70px", backgroundColor:"darkblue",border:"1px solid white", margin:"10px" , marginTop:"17px"}}>
-                  <Stack direction="row" justifyContent="space-between" margin="7px" alignItems="center">
-                  
-                
-                  <Box>
-                  <Typography fontSize="30px" >💬</Typography>
-               
-                  </Box>
-                    
-                    <button type='button' id="comment" onClick={()=>setOpen(true)}>comment</button>
-                  </Stack>
-                </Box>
-
-              
-              </Stack>
-              
+ {/* posts */}
+            {/* posts */}
+            <FlatList
+      data={data3}
+      renderItem={renderItem}
+      keyExtractor={(item) => item.id}
+    />
     
-              <Modal open={open} onClose={()=>setOpen(false)} sx={{display:"flex", justifyContent:"center", alignItems:"center", flexFlow:"column"}}>
-                    <Box  sx={{width:"300px",backgroundColor:"white", padding:"1em", borderRadius:"1em", border:"none", outline:"none"}}>
-                       <Stack sx={{gap:1}}>
-                       
-                        <form >
-                          <Stack sx={{gap:2}}>
-                          <TextField label="username" ></TextField>
-                          <TextField label="comment" multiline></TextField>
-                          <Button type="submit" variant='contained'>send</Button>
-                          </Stack>
-                         
-                        </form>
-                       
-                        </Stack> 
-                        
-                       
-                    </Box>
+    <Tooltip title="add post" sx={{position:"fixed", bottom:"4em", right:"4em"}}>
+                    <Fab onClick={()=>setOpen(true)} color="primary"><Add/></Fab>
+            </Tooltip>
+
+            <Modal open={open} onClose={()=>setOpen(false)} sx={{display:"flex", justifyContent:"center", alignItems:"center", flexFlow:"column"}}>
+                {/* ADD posts */}
+
+
+<Box sx={{width:"85%", backgroundColor:"white", padding:"1em", border:"none", outline:"none", maxHeight: "90vh", overflow: "auto"}}>
+           <Typography textAlign="center" marginTop="60px" fontWeight="bold">ADD POSTS</Typography>
+
+
+           <Stack backgoundColor="white" boxShadow="0 0 10 black" width="94%" margin="auto" gap="2em">
+            <TextField label="NAME"  type="text"
+              name="name"
+              value={formData3.name}
+              onChange={(e) => handleChange3(e)}>
+              </TextField>
+
+
+            <TextField label="POST" multiline
+               name="info"
+               value={formData3.info}
+               onChange={(e) => handleChange3(e)}>
+            </TextField>
+
+         
+         
+          <label htmlFor="">ADD PICTURE</label>
+          <input
+            type="file"
+            name="image"
+            accept="image/*"
+            onChange={(e) => handleImageChange3(e)}
+            />
+
+
+          {progress === 0 ? null : (
+            <div className="progress">
+              <div
+                className="progress-bar progress-bar-striped mt-2"
+                style={{ width: `${progress}%` }}
+              >
+                {`uploading image ${progress}%`}
+              </div>
+            </div>
+          )}
+            
+
+            <Button variant='contained'  onClick={handlePublish3}>POST</Button>
+
+          </Stack>
+        </Box>
+
             </Modal>
+
        </Box>
     
 

@@ -14,9 +14,13 @@ import HomeIcon from '@material-ui/icons/Home'
 import { RemoveRedEye } from '@material-ui/icons'
 
 import AssignmentIcon from '@material-ui/icons/Assignment';
-
-
+import { NoteAdd } from '@material-ui/icons';
 import { NavLink } from 'react-router-dom'
+import { AddBusiness } from '@mui/icons-material';
+import { ConnectWithoutContact } from '@mui/icons-material';
+import {SportsSoccer} from '@mui/icons-material';
+import {MenuBook} from '@mui/icons-material';
+
 
 export default function ButtonAppBar() {
   const[open,setOpen]=useState(false)
@@ -73,27 +77,27 @@ export default function ButtonAppBar() {
                        
                         <NavLink to="/hostels" className='nav-links' onClick={()=>setOpen(false)}>
                                 <ListItem button>
-                                   <ListItemAvatar><RemoveRedEye></RemoveRedEye></ListItemAvatar>
+                                   <ListItemAvatar><AddBusiness></AddBusiness></ListItemAvatar>
                                    <ListItemText>Hostels</ListItemText>
                                 </ListItem>
                         </NavLink>
                         <NavLink to="/sports" className='nav-links' onClick={()=>setOpen(false)}>
                                 <ListItem button>
-                                   <ListItemAvatar><RemoveRedEye></RemoveRedEye></ListItemAvatar>
+                                   <ListItemAvatar><SportsSoccer></SportsSoccer></ListItemAvatar>
                                    <ListItemText>Sports</ListItemText>
                                 </ListItem>
                         </NavLink>
                        
                         <NavLink to="/spirit" className='nav-links' onClick={()=>setOpen(false)}>
                                 <ListItem button>
-                                   <ListItemAvatar><RemoveRedEye></RemoveRedEye></ListItemAvatar>
+                                   <ListItemAvatar><MenuBook></MenuBook></ListItemAvatar>
                                    <ListItemText>Spirituality</ListItemText>
                                 </ListItem>
                         </NavLink>
                        
                         <NavLink to="/social" className='nav-links' onClick={()=>setOpen(false)}>
                                 <ListItem button>
-                                   <ListItemAvatar><RemoveRedEye></RemoveRedEye></ListItemAvatar>
+                                   <ListItemAvatar><ConnectWithoutContact></ConnectWithoutContact></ListItemAvatar>
                                    <ListItemText>Social</ListItemText>
                                 </ListItem>
                         </NavLink>
@@ -101,13 +105,7 @@ export default function ButtonAppBar() {
 
 
 
-                        <NavLink to="/admin" className='admin' onClick={()=>setOpen(false)}>
-                                <ListItem button>
-                                   <ListItemAvatar><RemoveRedEye></RemoveRedEye></ListItemAvatar>
-                                   <ListItemText>Admin</ListItemText>
-                                </ListItem>
-                        </NavLink>
-                       
+                      
                        
                        
                        
