@@ -12,38 +12,26 @@ function Comm(){
   let db= getFirestore(app)
   const [free, setFree]=useState([])
 
-  const [open1, setOpen1] = useState(false);
   let table = collection(db, "general_communications")
   
     useEffect(()=>{
-      setOpen1(true);
+   
       ;(async()=>{
        const raw_data=await getDocs(table)
-      
-       
-       
+     
          const show=raw_data.docs.map((doc)=> doc.data())
          
          console.log(show)
        
          setFree(show)
         
-         setOpen1(false);
-         
-      
- 
-       
- 
+
        
       })()
     
     },[])
 
 
-
-
- 
- 
 
   return(
 
@@ -53,9 +41,6 @@ function Comm(){
     
     <Box sx={{width:"100%", background:"antiquewhite" , color:"black" }}>
  
-    <Backdrop open={open1}>
-        <CircularProgress />
-      </Backdrop>
    
 
 <Typography textAlign="center" paddingTop="120px" fontSize="21px" fontWeight="bold" marginBottom="30px">GENERAL COMMUNICATIONS</Typography>
@@ -64,8 +49,12 @@ function Comm(){
 
 
 
-{
-            free.map(general_communications=>{
+{  free.length === 0 ?(
+             <Box sx={{display: "flex", justifyContent: "center", alignItems: "center"}}>
+                <CircularProgress />
+              </Box>   
+              ):
+           ( free.map(general_communications=>{
               
               return(
   
@@ -88,7 +77,7 @@ function Comm(){
 
    
 )
-})
+}))
 }
 
 

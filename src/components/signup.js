@@ -47,24 +47,32 @@ function Signup(){
 
    
   
-    <Box textAlign="center" marginTop="100px" >
-     
+    <Box textAlign="center"  className="loginbg" >
 
-         
-  
+      
 
-      <Typography marginTop="40px" textAlign="center" >REGISTER</Typography>
+      <Typography paddingTop="100px" textAlign="center"  fontFamily="Arial" fontSize="1.7em" fontWeight="700" color="purple" >REGISTER</Typography>
       
       <Box marginTop="30px">
      
       <form onSubmit={registerForm}>
            
-          <Stack backgoundColor="white" boxShadow="0 0 10 black" width="320px" margin="auto" gap="2em">
-            <TextField label="username" value={email} onChange={(e)=>setEmail(e.target.value)}></TextField>
+          <Stack backgoundColor="white" boxShadow="0 0 10 black"  width="90%" margin="auto" gap="2em">
+            <TextField className='login_input' label="email" inputProps={{ required: true }} autoComplete='off' value={email} onChange={(e)=>setEmail(e.target.value)}></TextField>
             
-            <TextField label="password" value={password} onChange={(e)=>setPassword(e.target.value)}></TextField>
+            <TextField className='login_input' type="password" label="password" inputProps={{ required: true }} autoComplete='off' value={password} onChange={(e)=>setPassword(e.target.value)}></TextField>
             <Button type="submit" variant='contained'>REGISTER</Button>
-          { error && <span>wrong email and password</span>}
+           <Box>
+           {error && <Typography color="red">Wrong email format. Please try again.</Typography>}
+           </Box>
+      <Typography>have account already?   <Box textAlign="center">
+            <Link to="/">
+              
+              <Typography textDecoration="none" fontWeight="600">
+                LOGIN
+              </Typography>
+            </Link>
+      </Box></Typography>
 
           </Stack>
 

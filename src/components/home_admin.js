@@ -5,14 +5,16 @@ import { storage } from "../firebase-config";
 import { toast } from "react-toastify";
 import app from "../firebase-config";
 import {  Text, View } from 'react-native-web'
-import { Box,Typography, Stack, TextField,Button} from '@mui/material'
+import { Box,Typography, Stack, TextField,Button,CircularProgress,Backdrop,Snackbar, IconButton} from '@mui/material'
 import ButtonAppBar from './appbar1'
 import { Delete } from "@material-ui/icons";
-
+import CloseIcon from '@material-ui/icons/Close'
 
 
 
 export default function HomeAdmin() {
+  const[open1, setOpen1]=useState(false)
+  const[open2, setOpen2]=useState(false)
     let db= getFirestore(app)
 
 
@@ -390,7 +392,34 @@ const handlePublish3 = () => {
 
 
 
+  // change govt
 
+  const [motto, setMotto] = useState("")
+ 
+  const [govt, setGovt] = useState("")
+ 
+ 
+    const resultsForm= async(e) =>{
+      e.preventDefault()
+   
+  
+    let data4={motto, govt}
+  
+    let store4=await addDoc(collection(db, "guild_govt"), {govt:data4.govt, motto:data4.motto})
+     
+      if(store4){
+       setOpen1(false)
+       setOpen2(true)
+       setMotto("")
+       setGovt("")
+    
+      }
+  
+      else{
+        console.log("not sent")
+      }
+    }
+ 
 
 
 
@@ -484,6 +513,23 @@ const handlePublish3 = () => {
           getAlldata4()
         }, []);
 
+           // view govt
+   
+      const [data6, setData6] = useState([]);
+      const getAlldata6=()=> {
+        getDocs(collection(db, "guild_govt")).then(docSnap => {
+          let users = [];
+          docSnap.forEach((doc)=> {
+              users.push({ ...doc.data(), id:doc.id })
+          });
+          setData6(users);
+        });
+      };
+      
+      useEffect(()=>{
+        getAlldata6()
+      }, []);
+
 
          //  delete giuld president
     const deleteItem4=async(id)=>{
@@ -491,6 +537,14 @@ const handlePublish3 = () => {
       
       getAlldata4();
     }
+
+
+        //  delete guid govt
+        const deleteItem6=async(id)=>{
+          await deleteDoc(doc(db, "guild_govt", id));
+          
+          getAlldata6();
+        }
 
 
     //  delete executive
@@ -522,10 +576,36 @@ const handlePublish3 = () => {
     }
 
     
-   
+    //feed back
+    const handleClose = ()=>{
+      setOpen2(false)
+     
+  
+  }
+  
+  const action = (
+      <React.Fragment>
+        <Button color="secondary" size="small" onClick={handleClose}>
+          CLOSE
+        </Button>
+        <IconButton
+          size="small"
+          aria-label="close"
+          color="inherit"
+          onClick={handleClose}
+        >
+          <CloseIcon fontSize="small" />
+        </IconButton>
+      </React.Fragment>
+    );
   return (
 
     <Box>
+      <Backdrop open={open1} sx={{color:"fff"}}>
+        <CircularProgress sx={{color:"white"}}/>
+    </Backdrop>
+    <Snackbar action={action} autoHideDuration={3000} anchorOrigin={{ vertical: 'top', horizontal: 'center' }}  open={open2} message="sent   successfully!!"></Snackbar>
+
         <ButtonAppBar/>
         <Typography textAlign="center" paddingTop="100px" fontWeight="bold">HOME PAGE ADMIN</Typography>
         <Typography textAlign="center">Add, Update, View and Delete different leaders here</Typography>
@@ -790,13 +870,53 @@ add STATE MINISTERS */}
               </div>
             </div>
           )}
+
+
+
+          {/* add guild government */}
+          <Box marginTop="30px">
+      <Typography textAlign="center">ADD GUILD GOVERNMENT AND MOTTO</Typography>
+      <form onSubmit={  resultsForm}>
+           
+          <Stack backgoundColor="white" boxShadow="0 0 10 black" width="96%" margin="auto" gap="2em">
+            <TextField label="govt e.g 20th guild govt" inputProps={{ required: true }} autoComplete='off' value={govt} onChange={(e)=>setGovt(e.target.value)}></TextField>
             
+           
+
+            <TextField label="motto" inputProps={{ required: true }} autoComplete='off' value={motto} onChange={(e)=>setMotto(e.target.value)}></TextField>
+            
+           
+            <Button type="submit" variant='contained'>POST</Button>
+
+          </Stack>
+
+        
+      </form>
+      </Box>
+
 
             <Button variant='contained'  onClick={handlePublish4}>ADD</Button>
 
           </Stack>
         </Box>
-        
+              {/* view and delete section */}
+
+              <Typography textAlign="center" marginTop="60px" fontWeight="bold">GUILD GOVERNMENT</Typography>
+        {data6.map(item => (
+           <view key={item.id}  getAlldata6={getAlldata6} >
+             <Box margin="10px" padding="3px" boxShadow="0 0 10px gray" backgroundColor="rgb(16, 16, 83)" color="white">
+            <Typography textAlign="center" fontWeight="bold" fontSize="24px" border="1px solid white" >{item.govt}</Typography>
+            <Typography textAlign="center" margin="10px">{item.motto}</Typography>
+            
+                             <Box color="red" textAlign="center">
+                              <Delete onClick={() => deleteItem6(item.id)} size="20px"/>
+                            </Box>
+            </Box>
+
+
+             </view>
+        ))}
+
 
           <Typography textAlign="center" marginTop="60px" fontWeight="bold">VIEW AND DELETE GUILD PRESIDENT</Typography>
 

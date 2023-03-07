@@ -67,21 +67,19 @@ function Login(){
 <Typography fontSize="1.7em" fontWeight="600" marginBottom="100px">Welcome| GU-guild-app</Typography>
 
 
-    
-
-
-
-
-<Box marginTop="30px">
+<Box>
 
 <form onSubmit={loginForm}>
      
-    <Stack backgoundColor="white" boxShadow="0 0 10 black" width="96%" margin="auto" gap="2em">
-      <TextField className='login_input' label="username" value={email} onChange={(e)=>setEmail(e.target.value)}></TextField>
+    <Stack backgoundColor="white" boxShadow="0 0 10 black" width="90%" margin="auto" gap="2em">
+      <TextField className='login_input' inputProps={{ required: true }} autoComplete='off' label="email" value={email} onChange={(e)=>setEmail(e.target.value)}></TextField>
       
-      <TextField className='login_input' label="password" value={password} onChange={(e)=>setPassword(e.target.value)}></TextField>
+      <TextField className='login_input' type="password" inputProps={{ required: true }} autoComplete='off' label="password" value={password} onChange={(e)=>setPassword(e.target.value)}></TextField>
       <Button type="submit" variant='contained'>LOGIN</Button>
+    
+  { error && <Typography color="red" textAlign="center" margin="5px">Wrong email and password </Typography>}
 
+  
       <Typography>Don't have account?   <Box textAlign="center">
             <Link to="/signup">
               
@@ -93,10 +91,7 @@ function Login(){
               </p>
             </Link>
       </Box></Typography>
-<div className='error'>
-  { error && <span>wrong longin details or check your network connection</span>}
 
-  </div>
     </Stack>
 
   

@@ -23,7 +23,7 @@ const Home=() =>{
     const [comment, setComment] = useState("")
     const [open1, setOpen1] = useState(false)
     const [open2, setOpen2] = useState(false)
-    const [loader, setLoader] = useState(false)
+
     const db =getFirestore(app)
 
 
@@ -79,7 +79,22 @@ const action = (
           getAlldata4()
         }, []);
 
-
+     // view govt
+   
+     const [data6, setData6] = useState([]);
+     const getAlldata6=()=> {
+       getDocs(collection(db, "guild_govt")).then(docSnap => {
+         let users = [];
+         docSnap.forEach((doc)=> {
+             users.push({ ...doc.data(), id:doc.id })
+         });
+         setData6(users);
+       });
+     };
+     
+     useEffect(()=>{
+       getAlldata6()
+     }, []);
 
  
 
@@ -119,7 +134,7 @@ const action = (
     let table1 = collection(db, "upcoming_events")
    const [free1, setFree1]=useState([])
     useEffect(()=>{
-          setLoader(true)
+          
       ;(async()=>{
        const raw_data1=await getDocs(table1)
       
@@ -130,8 +145,7 @@ const action = (
          console.log(show1)
      
          setFree1(show1)
-         setLoader(false)
-      
+        
       })()
     
     },[])
@@ -144,9 +158,7 @@ const action = (
 
    <Box>
 
-      <Backdrop open={loader}>
-        <CircularProgress />
-      </Backdrop>
+     
 
    <ButtonAppBar/>
    <Box className="main" sx={{width:"100%", marginTop:"5px", background:"rgb(250, 241, 229)" ,paddingBottom:"30px"}}>
@@ -161,14 +173,27 @@ const action = (
       </Box>
       
       <div className='cabinet' >
-            <Box margin="10px" padding="3px" boxShadow="0 0 10px gray" backgroundColor="rgb(16, 16, 83)" color="white">
-            <Typography textAlign="center" fontWeight="bold" fontSize="24px" border="1px solid white" >21<sup>st</sup> GUILD GOVERNMENT</Typography>
-            <Typography textAlign="center" margin="10px">"Operation Guild Rescue"</Typography>
+      
+        {data6.map(item => (
+           <view key={item.id}  getAlldata6={getAlldata6} >
+             <Box margin="10px" padding="3px" boxShadow="0 0 10px gray" backgroundColor="rgb(16, 16, 83)" color="white">
+                <Typography textAlign="center" fontWeight="bold" fontSize="24px" border="1px solid white" >{item.govt}</Typography>
+                <Typography textAlign="center" margin="10px">{item.motto}</Typography>
+                
+                          
             </Box>
 
 
+             </view>
+        ))}
 
-            {data4.map(item => (
+
+            {data4.length === 0 ?
+              <Box sx={{display: "flex", justifyContent: "center", alignItems: "center"}}>
+              <CircularProgress />
+            </Box>
+
+              :data4.map(item => (
             <view key={item.id}  getAlldata4={getAlldata4} >
             <Box height="60vh" margin="5px" boxShadow="0 0 10px gray" paddingTop="10px" border="1px solid blue">
 
@@ -217,9 +242,9 @@ const action = (
                           <Box width="200px" margin="auto">
                           <img style={{width:"200px", height:"16vh"}} src={require('../images/HowTo.png')} alt="" />
                           </Box>
-                          <TextField value={name} onChange={(e)=> setName(e.target.value)} label="full name" ></TextField>
-                          <TextField value={faculty} onChange={(e)=> setFaculty(e.target.value)}  label="faculty" ></TextField>
-                          <TextField value={comment} onChange={(e)=> setComment(e.target.value)} label="comment" multiline></TextField>
+                          <TextField inputProps={{ required: true }} autoComplete='off' value={name} onChange={(e)=> setName(e.target.value)} label="full name" ></TextField>
+                          <TextField inputProps={{ required: true }} autoComplete='off' value={faculty} onChange={(e)=> setFaculty(e.target.value)}  label="faculty" ></TextField>
+                          <TextField inputProps={{ required: true }} autoComplete='off' value={comment} onChange={(e)=> setComment(e.target.value)} label="comment" multiline></TextField>
                           <Button type="submit" variant='contained'>send</Button>
                           </Stack>
                          
@@ -254,8 +279,13 @@ const action = (
        
 
 
-                  {
-            free1.map(upcoming_events=>{
+              {  free1.length === 0 ?(
+             <Box sx={{display: "flex", justifyContent: "center", alignItems: "center"}}>
+                <CircularProgress />
+              </Box>   
+              ):
+              
+           ( free1.map(upcoming_events=>{
               
               return(
   
@@ -267,7 +297,7 @@ const action = (
 
 
                   )
-                  })
+                  }))
                   }
                  
                  
@@ -283,32 +313,36 @@ const action = (
           <Typography textAlign="center" padding="3px" margin="10px"  border="1px solid white" backgroundColor="rgb(16, 16, 83)" fontWeight="bold" color="white" fontSize="21px">RECENT COMMUNICATIONS</Typography>
 
 
-          {
-            free.map(guild_communications=>{
+          { free.length === 0 ?(
+                <Box sx={{display: "flex", justifyContent: "center", alignItems: "center"}}>
+                <CircularProgress />
+              </Box>
+              ):
+          (  free.map(guild_communications=>{
               
               return(
   
 
-<Box  sx={{backgroundColor:"rgb(16, 16, 83)", padding:"10px",  margin:"5px", paddingTop:"6px", marginTop:"35px"}}>
- <Stack sx={{ gap:".4em"}}>
-  <Box sx={{backgroundColor:"rgb(16, 16, 83)", color:"wheat",padding:"5px", margin:"2px",alignItems:"center" , border:"3px solid gray"}}>
-  <Typography sx={{margin:"3px", fontSize:"1em" }}>TO: {guild_communications.to1}</Typography>
-  <Typography sx={{ color:"white", fontSize:"1em", margin:"1px"}}>DATE: {guild_communications.date1}</Typography>
-  </Box>
-  
-   
-   
-   <Box border="1px solid grey" margin="4px">
-   
-   <Typography sx={{ color:"wheat", margin:"3px"}}>{guild_communications.info1}</Typography>
-   </Box>
- </Stack>
-</Box>
+                          <Box  sx={{backgroundColor:"rgb(16, 16, 83)", padding:"10px",  margin:"5px", paddingTop:"6px", marginTop:"35px"}}>
+                          <Stack sx={{ gap:".4em"}}>
+                            <Box sx={{backgroundColor:"rgb(16, 16, 83)", color:"wheat",padding:"5px", margin:"2px",alignItems:"center" , border:"3px solid gray"}}>
+                            <Typography sx={{margin:"3px", fontSize:"1em" }}>TO: {guild_communications.to1}</Typography>
+                            <Typography sx={{ color:"white", fontSize:"1em", margin:"1px"}}>DATE: {guild_communications.date1}</Typography>
+                            </Box>
+                            
+                            
+                            
+                            <Box border="1px solid grey" margin="4px">
+                            
+                            <Typography sx={{ color:"wheat", margin:"3px"}}>{guild_communications.info1}</Typography>
+                            </Box>
+                          </Stack>
+                          </Box>
 
    
-)
-})
-}
+                    )
+                    }))
+           }
 
 
 

@@ -68,8 +68,6 @@ function Sports(){
      ;(async()=>{
       const raw_data=await getDocs(netball)
      
-      
-      
         const show=raw_data.docs.map((doc)=> doc.data())
         
         console.log(show)
@@ -115,8 +113,6 @@ function Sports(){
 
      ;(async()=>{
       const raw_data=await getDocs(result)
-     
-      
       
         const show=raw_data.docs.map((doc)=> doc.data())
         
@@ -132,7 +128,42 @@ function Sports(){
    },[])
 
 
+      // table standing
+      // groupA
+   
+      const [data5, setData5] = useState([]);
+      const getAlldata5=()=> {
+        getDocs(collection(db, "tableA")).then(docSnap => {
+          let users = [];
+          docSnap.forEach((doc)=> {
+              users.push({ ...doc.data(), id:doc.id })
+          });
+          setData5(users);
+        });
+      };
+      
+      useEffect(()=>{
+        getAlldata5()
+      }, []);
 
+      // view groupB
+   
+      const [data6, setData6] = useState([]);
+      const getAlldata6=()=> {
+        getDocs(collection(db, "tableB")).then(docSnap => {
+          let users = [];
+          docSnap.forEach((doc)=> {
+              users.push({ ...doc.data(), id:doc.id })
+          });
+          setData6(users);
+        });
+      };
+      
+      useEffect(()=>{
+        getAlldata6()
+      }, []);
+
+    
 
 
   return(
@@ -142,49 +173,73 @@ function Sports(){
     
     <ButtonAppBar/>
     <Box textAlign="center" marginTop="100px" ></Box>
-    <Box textAlign="center"></Box>
-    <Box textAlign="center"></Box>
-    <Box textAlign="center"></Box>
-    <Box textAlign="center"></Box>
+   
 
 
 <Box sx={{ paddingBottom:"10px"}}>
-<Typography textAlign="center" >GAMES AND SPORTS AROUND CAMPUS</Typography>
-<Box  sx={{backgroundColor:"rgb(16, 16, 83)",padding:"10px", margin:"7px"}}>
-  <Stack sx={{margin:"15px", gap:"1em"}}>
-    <Typography sx={{ color:"wheat", border:"1px solid gray",padding:"10px", backgroundColor:"blue", margin:"5px",fontSize:"1.2em", textAlign:"center" }}>GULU UNIVERSITY GAMES UNION</Typography>
-    <Typography sx={{ color:"wheat", margin:"3px", border:"3px solid grey",height:"40vh"}}><img style={{width:"100%", height:"100%"}} src={require('../images/game1.jpg')} alt="" /></Typography>
-  </Stack>
-</Box>
+  <Typography textAlign="center" >GAMES AND SPORTS AROUND CAMPUS</Typography>
+  <Box  sx={{backgroundColor:"rgb(16, 16, 83)",padding:"10px", margin:"7px"}}>
+     <Stack sx={{margin:"15px", gap:"1em"}}>
+        <Typography sx={{ color:"wheat", border:"1px solid gray",padding:"10px", backgroundColor:"blue", margin:"5px",fontSize:"1.2em", textAlign:"center" }}>GULU UNIVERSITY GAMES UNION WELCOMES YOU</Typography>
+        <Typography sx={{ color:"wheat", margin:"3px", border:"3px solid grey",height:"40vh"}}><img style={{width:"100%", height:"100%"}} src={require('../images/game1.jpg')} alt="" /></Typography>
+    </Stack>
+  </Box>
 
 
-{
-            free.map(match_day=>{
-              
-              return(
-  
-
-<Box  sx={{backgroundColor:"rgb(16, 16, 83)", height:"45vh", margin:"5px", paddingTop:"5px", marginTop:"20px"}}>
-  <Stack sx={{margin:"15px", gap:"1em"}}>
-    <Typography sx={{backgroundColor:"darkblue", color:"wheat",border:"1px solid white", height:"5vh",padding:"4px", margin:"3px",textAlign:"center", fontSize:"22px" }}>NOTICE</Typography>
-    <Box sx={{ border:"4px solid grey",height:"30vh"}}>
-    <Typography sx={{ margin:"7px", fontSize:"23px", textAlign:"center", fontWeight:"bold", color:"lawngreen"}}> {match_day.match}</Typography>
-   <Box width="200px" margin="auto" marginTop="15px" >
-
-   <Typography sx={{ color:"wheat", margin:"7px", fontSize:"22px"}}>DATE:{match_day.time}</Typography>
-   
-   </Box>
+{/* matchDay */}
+  <Typography textAlign="center" marginTop="70px" fontSize="1.1em">INCOMING GAME</Typography>
+  {free.length === 0 ? (
+  <Typography sx={{ color: "red" , textAlign:"center" }}>No matches currently available</Typography>
+) : (
+  free.map((match_day) => (
+    <Box
+      sx={{
+        backgroundColor: "rgb(16, 16, 83)",
+        padding:"10px",
+        margin: "5px",
+        paddingTop: "5px",
+        marginTop: "20px",
+      }}
+    >
+      <Stack sx={{ margin: "15px", gap: "1em" }}>
+        <Typography
+          sx={{
+            backgroundColor: "darkblue",
+            color: "wheat",
+            border: "1px solid white",
+            height: "5vh",
+            padding: "4px",
+            margin: "3px",
+            textAlign: "center",
+            fontSize: "22px",
+          }}
+        >
+          NOTICE
+        </Typography>
+        <Box sx={{ border: "4px solid grey", padding:"12px" }}>
+          <Typography
+            sx={{
+              margin: "2px",
+              fontSize: "1.4em",
+              textAlign: "center",
+              fontWeight: "bold",
+              color: "lawngreen",
+            }}
+          >
+            {match_day.match}
+          </Typography>
+          <Box width="95%" margin="auto" marginTop="15px">
+            <Typography
+              sx={{ color: "wheat", margin: "7px", fontSize: "1.1em" ,  textAlign: "center"}}
+            >
+              {match_day.time}
+            </Typography>
+          </Box>
+        </Box>
+      </Stack>
     </Box>
-  </Stack>
-</Box>
-
-
-                  )
-                  })
-                  }
-
-
-
+  ))
+)}
 
 
 
@@ -199,7 +254,13 @@ function Sports(){
      <Typography textAlign="center" margin="4px" marginTop="20px" padding="4px" backgroundColor="darkblue" color="white" border="1px solid gray">FOOTBALL FIXTURES</Typography>
      <Box backgroundColor="lightgray" border="2px solid darkblue" color="black" margin="5px" >
 
-     {
+
+
+{/* football_fixtures */}
+
+     {free1.length === 0 ? (
+  <Typography sx={{ color: "red" , textAlign:"center" }}>No matches currently available</Typography>
+        ) : (
             free1.map(football_fixtures=>{
               
               return(
@@ -222,17 +283,22 @@ function Sports(){
 
         )
                   })
-                  }
+                 ) }
+
 
 
      </Box>
+
+     {/* netball_fixtures */}
 
 
      <Typography textAlign="center" margin="4px" marginTop="30px" padding="4px" backgroundColor="darkblue" color="white" border="1px solid gray">NETBALL FIXTURES</Typography>
      <Box backgroundColor="lightgray" border="2px solid darkblue" color="black" margin="5px" >
             {/* data card start*/}
         
-        {
+        { free2.length === 0 ? (
+           <Typography sx={{ color: "red" , textAlign:"center" }}>No matches currently available</Typography>
+           ) : (
             free2.map(netball_fixtures=>{
               
               return(
@@ -256,7 +322,7 @@ function Sports(){
 
         )
       })
-      }
+      )}
           {/* data card end*/}
 
      </Box>
@@ -269,7 +335,9 @@ function Sports(){
        
    
 
-        {
+        {free3.length === 0 ? (
+           <Typography sx={{ color: "red" , textAlign:"center" }}>No matches currently available</Typography>
+            ) : (
             free3.map(volleyfootball_fixtures=>{
               
               return(
@@ -292,7 +360,7 @@ function Sports(){
 
         )
       })
-      }
+      )}
        
           {/* data card end*/}
 
@@ -303,6 +371,9 @@ function Sports(){
      <Box backgroundColor="lightgray" border="2px solid darkblue" color="black" margin="5px" >
                {/* data card start*/}
                {
+                free4.length === 0 ? (
+                  <Typography sx={{ color: "red" , textAlign:"center" }}>No matches currently available</Typography>
+                ) : (
             free4.map(match_results=>{
               
               return(
@@ -321,11 +392,11 @@ function Sports(){
                   </Box>
 
                 </Stack>
-</Box>
+          </Box>
 
-)
-})
-}
+          )
+          })
+          )}
 
 {/* data card end*/}
 
@@ -354,27 +425,24 @@ function Sports(){
          
                   </TableHead>
         
-                     <TableBody>
-       
-                        <TableRow>
-                          <TableCell sx={{textAlign:"center" }}>1</TableCell>
-                          <TableCell sx={{textAlign:"justify"}}>FOS</TableCell>
-                          <TableCell sx={{textAlign:"center"}}>7 </TableCell>
-                          <TableCell sx={{textAlign:"center"}}>7</TableCell>
-                        </TableRow>
+                  <TableBody>
+      {data5.length === 0 ? (
+        <Typography textAlign="center" color="red">no matches currently</Typography>
+      ) : (
+        data5.map((item) => (
+          <TableRow key={item.id} getAlldata5={getAlldata5}>
+            <TableCell sx={{textAlign:"center" }}>{item.position}</TableCell>
+            <TableCell sx={{textAlign:"justify"}}>{item.team}</TableCell>
+            <TableCell sx={{textAlign:"center"}}>{item.goals}</TableCell>
+            <TableCell sx={{textAlign:"center"}}>{item.points}</TableCell>
+            <Box color="red" textAlign="center" marginTop="16px">
+          
+          </Box>
+          </TableRow>
          
-                     </TableBody>
-
-                     <TableBody>
-       
-                      <TableRow>
-                        <TableCell sx={{textAlign:"center" }}>2</TableCell>
-                        <TableCell sx={{textAlign:"justify"}}>FEH</TableCell>
-                        <TableCell sx={{textAlign:"center"}}>5</TableCell>
-                        <TableCell sx={{textAlign:"center"}}>4</TableCell>
-                      </TableRow>
-
-                     </TableBody>
+        ))
+      )}
+    </TableBody>
 
                 </Table>
            </TableContainer >
@@ -399,27 +467,31 @@ function Sports(){
 
          </TableHead>
 
-            <TableBody>
+         <TableBody>
 
-               <TableRow>
-                 <TableCell sx={{textAlign:"center" }}>1</TableCell>
-                 <TableCell sx={{textAlign:"justify"}}>FOS</TableCell>
-                 <TableCell sx={{textAlign:"center"}}>7 </TableCell>
-                 <TableCell sx={{textAlign:"center"}}>7</TableCell>
-               </TableRow>
+            {data6.length === 0 ?
+            <Box>
+                <Typography sx={{textAlign:"center" }} color="red" >no matches currently</Typography>
+            </Box>
+
+              :
+                data6.map(item => (
+                    
+                       <TableRow key={item.id}  getAlldata6={getAlldata6} >
+                          <TableCell sx={{textAlign:"center" }}>{item.position1}</TableCell>
+                          <TableCell sx={{textAlign:"justify"}}>{item.team1}</TableCell>
+                          <TableCell sx={{textAlign:"center"}}>{item.goals1}</TableCell>
+                          <TableCell sx={{textAlign:"center"}}>{item.points1}</TableCell>
+                          <Box color="red" textAlign="center" marginTop="16px">
+                          
+                        </Box>
+                        </TableRow>
+                  
+                    ))
+                }
 
             </TableBody>
 
-            <TableBody>
-
-             <TableRow>
-               <TableCell sx={{textAlign:"center" }}>2</TableCell>
-               <TableCell sx={{textAlign:"justify"}}>FEH</TableCell>
-               <TableCell sx={{textAlign:"center"}}>5</TableCell>
-               <TableCell sx={{textAlign:"center"}}>4</TableCell>
-             </TableRow>
-
-            </TableBody>
 
        </Table>
   </TableContainer >

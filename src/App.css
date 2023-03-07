@@ -1,7 +1,5 @@
 
-*{
-  font-family: Arial, Helvetica, sans-serif;
-}
+
 .ministers{
   display: grid;
   grid-template-columns: repeat(2,1fr);

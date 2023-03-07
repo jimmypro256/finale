@@ -4,10 +4,10 @@ import AccordionSummary from '@mui/material/AccordionSummary';
 import AccordionDetails from '@mui/material/AccordionDetails';
 import Typography from '@mui/material/Typography';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-import {Box, Stack} from '@mui/material'
+import {Box, Stack, CircularProgress} from '@mui/material'
 import app from '../firebase-config';
 
-import { Timestamp, collection, addDoc,getFirestore,getDocs,doc,deleteDoc } from "firebase/firestore";
+import {  collection,getFirestore,getDocs} from "firebase/firestore";
 export default function SimpleAccordion() {
 
   let db= getFirestore(app)
@@ -97,7 +97,12 @@ export default function SimpleAccordion() {
         </AccordionSummary>
         <AccordionDetails>
              {/* EXECUTIVES */}
-             {data.map(item => (
+             {data.length === 0 ?
+            <Box sx={{display: "flex", justifyContent: "center", alignItems: "center"}}>
+            <CircularProgress />
+            </Box>  
+
+            :data.map(item => (
            <view key={item.id}  getAlldata={getAlldata} >
              <Box border="4px solid gray" backgroundColor="rgb(1, 1, 26)"  marginTop="10px" width="95%" margin="10px">
               <Stack direction="row" gap=".7em">
@@ -133,7 +138,12 @@ export default function SimpleAccordion() {
         </AccordionSummary>
         <AccordionDetails>
                       {/* CABINET */}
-                      {data1.map(item => (
+             {data1.length === 0 ?
+            <Box sx={{display: "flex", justifyContent: "center", alignItems: "center"}}>
+            <CircularProgress />
+            </Box>  
+
+            :data1.map(item => (
            <view key={item.id}  getAlldata1={getAlldata1} >
              <Box border="4px solid gray" backgroundColor="rgb(1, 1, 26)"  marginTop="10px" width="95%" margin="10px">
               <Stack direction="row" gap=".7em">
@@ -170,7 +180,14 @@ export default function SimpleAccordion() {
         </AccordionSummary>
         <AccordionDetails>
          {/* STATE MINISTERS */}
-         {data2.map(item => (
+         {
+         data2.length === 0 ?
+         <Box sx={{display: "flex", justifyContent: "center", alignItems: "center"}}>
+         <CircularProgress />
+         </Box>  
+
+         :
+         data2.map(item => (
                         <view key={item.id}  getAlldata2={getAlldata2} >
                           <Box border="4px solid gray" backgroundColor="rgb(1, 1, 26)"  marginTop="10px" width="95%" margin="10px">
                             <Stack direction="row" gap=".7em">
@@ -206,7 +223,14 @@ export default function SimpleAccordion() {
         <AccordionDetails>
 
         {/* LEGISLATORS */}
-        {data3.map(item => (
+        {
+        data3.length === 0 ?
+        <Box sx={{display: "flex", justifyContent: "center", alignItems: "center"}}>
+        <CircularProgress />
+        </Box>  
+
+        :
+        data3.map(item => (
            <view key={item.id}  getAlldata3={getAlldata3} >
              <Box border="4px solid gray" backgroundColor="rgb(1, 1, 26)"  marginTop="10px" width="95%" margin="10px">
               <Stack direction="row" gap=".7em">

@@ -180,10 +180,10 @@ function HostelAdmin(){
       <form onSubmit={SubmitForm}>
            
           <Stack backgroundcolor="white" boxShadow="0 0 10 black" width="95%" margin="auto" gap="2em">
-            <TextField label="hostel name" autoComplete='off' value={hname} onChange={(e)=>setHname(e.target.value)}></TextField>
-            <TextField label="Room/rooms description and prices" autoComplete='off' multiline  value={single} onChange={(e)=>setSingle(e.target.value)}></TextField>
+            <TextField inputProps={{ required: true }} label="hostel name" autoComplete='off' value={hname} onChange={(e)=>setHname(e.target.value)}></TextField>
+            <TextField inputProps={{ required: true }} label="Room/rooms description and prices" autoComplete='off' multiline  value={single} onChange={(e)=>setSingle(e.target.value)}></TextField>
 
-            <TextField label="tel no" autoComplete='off'  value={contact} onChange={(e)=>setContact(e.target.value)}></TextField>
+            <TextField label="tel no" inputProps={{ required: true }} autoComplete='off'  value={contact} onChange={(e)=>setContact(e.target.value)}></TextField>
            
 
             <Button type="submit" variant='contained'>POST</Button>
@@ -199,14 +199,14 @@ function HostelAdmin(){
       <form onSubmit={SubmitForm1}>
            
           <Stack backgroundcolor="white" boxShadow="0 0 10 black" width="95%" margin="auto" gap="2em">
-            <TextField label="hostel name" autoComplete='off' value={hname1} onChange={(e)=>setHname1(e.target.value)}></TextField>
-            <TextField label="location" autoComplete='off'  value={location} onChange={(e)=>setLocation(e.target.value)}></TextField>
-            <TextField label="contact" autoComplete='off' value={contact1} onChange={(e)=>setContact1(e.target.value)}></TextField>
-            <TextField label="hostel type e.g mixed" autoComplete='off'  value={type} onChange={(e)=>setType(e.target.value)}></TextField>
-            <TextField label="Single rooms" autoComplete='off' value={scost} onChange={(e)=>setScost(e.target.value)}></TextField>
-            <TextField label="Double rooms" autoComplete='off'  value={dcost} onChange={(e)=>setDcost(e.target.value)}></TextField>
-            <TextField label="Power supply" autoComplete='off' value={water} onChange={(e)=>setWater(e.target.value)}></TextField>
-            <TextField label="Water supply" autoComplete='off'  value={power} onChange={(e)=>setPower(e.target.value)}></TextField>
+            <TextField label="hostel name" inputProps={{ required: true }} autoComplete='off' value={hname1} onChange={(e)=>setHname1(e.target.value)}></TextField>
+            <TextField label="location" inputProps={{ required: true }} autoComplete='off'  value={location} onChange={(e)=>setLocation(e.target.value)}></TextField>
+            <TextField label="contact" inputProps={{ required: true }} autoComplete='off' value={contact1} onChange={(e)=>setContact1(e.target.value)}></TextField>
+            <TextField label="hostel type e.g mixed" inputProps={{ required: true }} autoComplete='off'  value={type} onChange={(e)=>setType(e.target.value)}></TextField>
+            <TextField label="Single rooms" inputProps={{ required: true }} autoComplete='off' value={scost} onChange={(e)=>setScost(e.target.value)}></TextField>
+            <TextField label="Double rooms" inputProps={{ required: true }} autoComplete='off'  value={dcost} onChange={(e)=>setDcost(e.target.value)}></TextField>
+            <TextField label="Power supply" inputProps={{ required: true }} autoComplete='off' value={water} onChange={(e)=>setWater(e.target.value)}></TextField>
+            <TextField label="Water supply" inputProps={{ required: true }} autoComplete='off'  value={power} onChange={(e)=>setPower(e.target.value)}></TextField>
 
 
             <Button type="submit" variant='contained'>POST</Button>

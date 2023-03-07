@@ -721,7 +721,8 @@ add birthday*/}
 
 
 
-             <Typography textAlign="center" marginTop="60px" fontWeight="bold">VIEW AND DELETE BIRTHDAY</Typography>
+           <Box>
+           <Typography textAlign="center" marginTop="60px" fontWeight="bold">VIEW AND DELETE BIRTHDAY</Typography>
                 {/* BDS */}
                 {data2.map(item => (
                         <view key={item.id}  getAlldata2={getAlldata2} >
@@ -751,6 +752,7 @@ add birthday*/}
                       ))}
 
 
+           </Box>
 
 
 

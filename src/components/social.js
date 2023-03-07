@@ -285,16 +285,6 @@ const handlePublish3 = () => {
 
 
 
-<br></br>
-<Typography textAlign="center" fontSize="21px" marginTop="40px" fontWeight="bold">CAMPUS TV</Typography>
-
-<Box backgroundColor="black" height="55vh" paddingTop="10px" >
- 
-  <Box height="43vh" border="1px solid white" backgroundColor="gray" borderRadius="20px" marginBottom="10px" margin="20px">
-     
-  </Box>
-  <Typography textAlign="center"  >🔼🔳🔽</Typography>
-</Box>
 
 <br></br>
 <Typography textAlign="center" marginTop="10px" fontWeight="600">TODAYS BIRTHDAY WISHES</Typography>

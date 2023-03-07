@@ -11,10 +11,10 @@ import {Box,Typography,Stack,Divider, Drawer,ListItem,ListItemAvatar, ListItemTe
 
 import { useState } from 'react';
 import HomeIcon from '@material-ui/icons/Home'
-import { RemoveRedEye } from '@material-ui/icons'
 
+import { Logout } from '@mui/icons-material';
 import AssignmentIcon from '@material-ui/icons/Assignment';
-import { NoteAdd } from '@material-ui/icons';
+
 import { NavLink } from 'react-router-dom'
 import { AddBusiness } from '@mui/icons-material';
 import { ConnectWithoutContact } from '@mui/icons-material';
@@ -46,7 +46,7 @@ export default function ButtonAppBar() {
       </AppBar>
 
 
-      <Drawer  open={open} onClose={()=>setOpen(false)} sx={{width:300, "& .MuiDrawer-paper":{
+      <Drawer  open={open} onClose={()=>setOpen(false)} sx={{width:"40%", "& .MuiDrawer-paper":{
         width:250, boxSizing:"border-box", backgroundColor:"black",borderTop:"1px solid white",borderRight:"1px solid white", marginTop:"59px"
       }}}>
        <Stack gap={3} >
@@ -55,10 +55,9 @@ export default function ButtonAppBar() {
                 </Box>
                 <br></br>
                 <br></br>
-                <br></br>
-                <br></br>
+                
                 <Divider color="wheat"></Divider>  
-                <Box gap="3em">
+                <Box gap="2.5em">
                         
  
                         <NavLink to="/home" className='nav-links' onClick={()=>setOpen(false)}>
@@ -102,7 +101,12 @@ export default function ButtonAppBar() {
                                 </ListItem>
                         </NavLink>
 
-
+                        <NavLink to="/" className='nav-links' onClick={()=>setOpen(false)}>
+                                <ListItem button>
+                                   <ListItemAvatar><Logout></Logout></ListItemAvatar>
+                                   <ListItemText>Logout</ListItemText>
+                                </ListItem>
+                        </NavLink>
 
 
                       
